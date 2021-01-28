@@ -37,8 +37,8 @@ public class GameManager : MonoBehaviour
     public int monster_count = 0;
 
     // 슬라이더 이벤트를 처리하는 2가지 방법
-    // 1. 슬라이더의 값이 바뀔때, 함수를 호출하는 방법 -> 사용
-    // 2. 스트립트에서 슬라이더에 접근해서 처리하는 방식
+    // 1. 슬라이더의 값이 바뀔때, 함수를 호출하는 방법
+    // 2. 스트립트에서 슬라이더에 접근해서 처리하는 방식 -> 사용
 
     // 슬라이더 관련
     public Slider slider; // 0 ~ 100 정수값 slider.value
@@ -81,7 +81,7 @@ public class GameManager : MonoBehaviour
     // 화살은 충돌시 말고 1초마다 생성 - 1초는 테스트후 조정
     void Update()
     {
-        Debug.Log(slider.value); // 값 확인용
+        // Debug.Log(slider.value); // 값 확인용
         // (a, b, v) : a에서 b값으로 v만큼 이동하는 코드
         // slider.value = Mathf.MoveTowards(slider.value, 1.0f, 0.01f);
         

@@ -38,11 +38,12 @@ public class bulletMove : MonoBehaviour
     {
         slider_value = GameManager.Game.slider.value; // 처리전 슬라이더 값
         Rotation_angle = 140 - slider_value;
-        transform.localEulerAngles = new Vector3(0, 0, Rotation_angle);
-
+        // transform.localEulerAngles = new Vector3(0, 0, Rotation_angle);
+        transform.eulerAngles = new Vector3(0, 0, Rotation_angle);
         // transform.position = Vector3.up * speed * Time.deltaTime;
-        transform.Translate(transform.right * speed * Time.deltaTime);        
-        // transform.Translate(transform.up * speed * Time.deltaTime);        
+        // transform.Translate(transform.right * speed * Time.deltaTime);
+        transform.Translate(transform.up *-1f * speed * Time.deltaTime);  
+        Debug.Log("회전값 : " + Rotation_angle);
     }
 
     void OnTriggerEnter2D(Collider2D collision) // 화살 제거
