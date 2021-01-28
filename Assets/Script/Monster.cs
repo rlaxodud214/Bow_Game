@@ -9,7 +9,7 @@ public class Monster : MonoBehaviour
     public int life = 3;
     public int count = 7;
     public int maxMonsterCount = 10;
-    public float MonsterSpeed = 0.05f; // 몬스터 이동 속도
+    public float MonsterSpeed = 0.2f; // 몬스터 이동 속도
 
     // dynamic m, s, l, c;
 
@@ -42,40 +42,9 @@ public class Monster : MonoBehaviour
         //        c++;
         //}
     }
-
+    // 1 : 몬스터 2초마다 스폰, 2 : 몬스터 1.5초마다 스폰, 3 : 몬스터 1초마다 스폰, 4 : 몬스터 0.7초마다 스폰
     void Update()
     {
-        //c = 0;
-        //for (int i = 0; i < m.Length; i++)
-        //    if (s[i] == 1)
-        //        c++;
-
-        //// Debug.Log("남아있는 몬스터수 : " + GameObject.FindGameObjectsWithTag("Monster").Length); 
-
-        //for (int i=0; i<count; i++)
-        //{
-        //    if(m[i] == null)
-        //    {
-        //        s[i] = 0;
-        //    }
-
-        //    for (int j = 0; j < count; j++)
-        //    {
-        //        if (GameObject.FindGameObjectsWithTag("Monster").Length < maxMonsterCount)
-        //        {
-        //            int num = Random.Range(0, 30);
-        //            if (num%10 == 0) { 
-        //                int num1 = Random.Range(1, 10);
-        //                if (s[j] == 0) {
-        //                    m[j] = Instantiate(m[i], l[num%9]+Vector3.up*(num1%4), Quaternion.identity); // 새로운 몬스터 생성 Quaternion.identity : 회전값 지정 - 불필요   
-        //                    Debug.Log(num1);
-        //                }
-        //            }
-        //            // else
-        //                // Debug.Log("num : " + num);
-        //        }
-        //    }
-        //}
         if (GameManager.Game.count >= 40)
         {
             MonsterSpeed = 0.1f + (GameManager.Game.count - 40) * 0.002f;
@@ -120,3 +89,38 @@ public class Monster : MonoBehaviour
         }
     }
 }
+
+
+
+// Update
+//c = 0;
+//for (int i = 0; i < m.Length; i++)
+//    if (s[i] == 1)
+//        c++;
+
+//// Debug.Log("남아있는 몬스터수 : " + GameObject.FindGameObjectsWithTag("Monster").Length); 
+
+//for (int i=0; i<count; i++)
+//{
+//    if(m[i] == null)
+//    {
+//        s[i] = 0;
+//    }
+
+//    for (int j = 0; j < count; j++)
+//    {
+//        if (GameObject.FindGameObjectsWithTag("Monster").Length < maxMonsterCount)
+//        {
+//            int num = Random.Range(0, 30);
+//            if (num%10 == 0) { 
+//                int num1 = Random.Range(1, 10);
+//                if (s[j] == 0) {
+//                    m[j] = Instantiate(m[i], l[num%9]+Vector3.up*(num1%4), Quaternion.identity); // 새로운 몬스터 생성 Quaternion.identity : 회전값 지정 - 불필요   
+//                    Debug.Log(num1);
+//                }
+//            }
+//            // else
+//                // Debug.Log("num : " + num);
+//        }
+//    }
+//}

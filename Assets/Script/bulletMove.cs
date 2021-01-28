@@ -14,7 +14,7 @@ public class bulletMove : MonoBehaviour
     public int Score;
     
     public GameObject Bullet; // 화살
-    public Sprite BulletSprite; // 화살 이미지 - 아직 미사용
+    //public Sprite BulletSprite; // 화살 이미지 - 아직 미사용
 
     Camera Camera;
 
@@ -83,7 +83,7 @@ public class bulletMove : MonoBehaviour
             
         if (collision.gameObject.tag == "Monster")
         {
-            Create_Bullet();
+            Create_Bullet(); // 화살은 충돌시 말고 1초마다 생성 - 1초는 테스트후 조정
             GameManager.Game.countPlus();
             // Debug.Log("Score : " + Score);
             Destroy(gameObject);

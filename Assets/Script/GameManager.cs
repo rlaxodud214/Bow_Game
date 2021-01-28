@@ -23,7 +23,6 @@ public class GameManager : MonoBehaviour
 
     // 몬스터 오브젝트
     public List<GameObject> monster = new List<GameObject>();
-    public int[] monster_state = new int[7] { 1, 1, 1, 1, 1, 1, 1 };
     public Vector3[] monster_location = new Vector3[7]; 
     public int monster_count = 0;
 
@@ -41,9 +40,7 @@ public class GameManager : MonoBehaviour
     void Awake()                                      // 제일 처음 호출되는 함수
     {
         _gManager = GetComponent<GameManager>();      // _gManager라는 변수에 자신의 GameManager 컴포넌트를 참조하는 값을 저장, Game속성에 set코드를 짜면 다르게 대입가능
-        int n = GameObject.FindGameObjectsWithTag("Monster").Length;
-        Debug.Log(n);
-        for(int i=0; i<n; i++)
+        for(int i=0; i<7; i++)
         {
             monster.Add(GameObject.FindGameObjectsWithTag("Monster")[i]);
             monster_location[i] = monster[i].transform.position;
@@ -66,18 +63,23 @@ public class GameManager : MonoBehaviour
     {
         monster_count = GameObject.FindGameObjectsWithTag("Monster").Length;
         monster_v.text = "몬스터 속도 : " + Monster.state.MonsterSpeed.ToString() + "f";
-        for (int i = 0; i < 7; i++) {
-            monster_state[i] = 0;
-            if (monster[i] != null)
+        for (int i = 0; i < monster.Count; i++) {
+            Debug.Log("monster_count : " + monster_count);
+            if (monster[i] == null)
             {
-                monster_state[i] = 1;
+                if (monster_count < 6) // 몬스터의 수가 6이하이면 랜덤 위치에 생성
+                {
+                    int num1 = Random.Range(1, 8);
+                    int num2 = Random.Range(1, 5);
+                    for (int j = 0; j < monster.Count; j++)
+                    {
+                        if (monster[j] != null)
+                            monster.Add(Instantiate(monster[j], monster_location[num1 % 7] + Vector3.up * (num2 % 4), Quaternion.identity)); // 새로운 몬스터 생성 Quaternion.identity : 회전값 지정 - 불필요
+                        break;
+                    }
+                }
             }
-            if (monster_count < 6)
-            {
-                int num1 = Random.Range(1, 8);
-                int num2 = Random.Range(1, 5);
-                monster[i] = Instantiate(monster[0], monster_location[num1 % 7] + Vector3.up * (num2 % 4), Quaternion.identity); // 새로운 몬스터 생성 Quaternion.identity : 회전값 지정 - 불필요
-            }
+            
         }
     }
 
