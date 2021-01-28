@@ -17,13 +17,21 @@ public class GameManager : MonoBehaviour
     public GameObject[] Life = new GameObject[4];     // 남은 목숨을 저장할 배열
     public int life;                                  // 남은 목숨, 하트 갯수
     public int count = 0;
-    public Text monster_v;
     public Text score;
     public Text stage;
+    public float time;
+    public float nextTime_Arrow = 0.0f;
+    public float Timeplus_Arrow = 1.0f; // 화살 생성 주기 현재 : 0.7초
+    public GameObject Arrow_Prefabs;  // 화살 복제시 사용할 프리팹
+    public GameObject Arrow; // 화살 // bulletPos값을 저장하기 위해 초기 화살 오브젝트 변수 생성
+    public Vector3 ArrowPos; // 화살 초기 위치(화살 생성 좌표값)
 
-    // 몬스터 오브젝트
+    public float nextTime_Monster = 0.0f;
+    public float Timeplus_Monster = 1.5f; // 몬스터 생성 주기 현재 : 1.5초
+        // 몬스터 오브젝트
+    public GameObject Monster_Prefabs;  // 몬스터 복제시 사용할 프리팹
     public List<GameObject> monster = new List<GameObject>();
-    public Vector3[] monster_location = new Vector3[7]; 
+    public Vector3[] monster_location = new Vector3[7]; // 몬스터 생성시 위치 배열
     public int monster_count = 0;
 
     #endregion
@@ -45,56 +53,57 @@ public class GameManager : MonoBehaviour
             monster.Add(GameObject.FindGameObjectsWithTag("Monster")[i]);
             monster_location[i] = monster[i].transform.position;
         }
+        Arrow = GameObject.FindGameObjectsWithTag("Arrow")[0];
+        ArrowPos = Arrow.gameObject.transform.position; // 화살의 현재 위치를 받아온다.
+
+        stage.text = "1"; //n Back 텍스트 설정
+        score.text = bulletMove.bullet.Score.ToString(); //n Back 텍스트 설정
+        //stage&life 변수 초기화
+        life = 3;
     }
     #endregion
 
     // Start is called before the first frame update
     void Start()
     {
-        // LevelText.text = SceneChangeManager.SCENE.Level + " Back"; //n Back 텍스트 설정
-        stage.text = "1"; //n Back 텍스트 설정
-        score.text = bulletMove.bullet.Score.ToString(); //n Back 텍스트 설정
-        monster_v.text = "몬스터 속도 : 0.05f";
-        //stage&life 변수 초기화
-        life = 3;
+        
     }
-
+    // 화살은 충돌시 말고 1초마다 생성 - 1초는 테스트후 조정
     void Update()
     {
-        monster_count = GameObject.FindGameObjectsWithTag("Monster").Length;
-        monster_v.text = "몬스터 속도 : " + Monster.state.MonsterSpeed.ToString() + "f";
-        for (int i = 0; i < monster.Count; i++) {
-            Debug.Log("monster_count : " + monster_count);
-            if (monster[i] == null)
-            {
-                if (monster_count < 6) // 몬스터의 수가 6이하이면 랜덤 위치에 생성
-                {
-                    int num1 = Random.Range(1, 8);
-                    int num2 = Random.Range(1, 5);
-                    for (int j = 0; j < monster.Count; j++)
-                    {
-                        if (monster[j] != null)
-                            monster.Add(Instantiate(monster[j], monster_location[num1 % 7] + Vector3.up * (num2 % 4), Quaternion.identity)); // 새로운 몬스터 생성 Quaternion.identity : 회전값 지정 - 불필요
-                        break;
-                    }
-                }
-            }
-            
+        time += Time.deltaTime;
+        // 1초마다 실행 - 화살 생성
+        if (time > nextTime_Arrow)
+        {
+            Create_Bullet();
+            nextTime_Arrow += Timeplus_Arrow; // Timeplus : 몬스터 생성주기
+        }
+
+        // 1.5초마다 실행 - 몬스터 생성
+        if (time > nextTime_Monster) {
+            Create_Monster();
+            nextTime_Monster += Timeplus_Monster; // Timeplus : 몬스터 생성주기
         }
     }
+    void Create_Bullet() // 새로운 화살 생성
+    {
+        // var AngleZ = -90f;
+        // 초기 위치(bulletPos)에 화살을 생성시키는 코드
+        var t = Instantiate(Arrow_Prefabs, ArrowPos, Quaternion.identity); // 새로운 화살 생성 Quaternion.identity : 회전값 지정 - 불필요   
+        t.transform.Rotate(new Vector3(0, 0, 90f));
+    }
 
-    public void countPlus() { count++; } // 적 처치 횟수 증가
-
-    public void ui() { 
-        //틀린경우 라이프 감소
-        if(life > 0)
-            Life[life].SetActive(false);     // 아까 life를 2로 초기화한 이유는 인덱스 값이 0 1 2 이므로 3번째 값을 호출할 때 2를 사용해서 2로 초기화 시킴.
-        life--;                          // 인덱스 1 감소
-        Debug.Log("life : " + life);
-        //life == 0이 되면 게임오버
-        if (life < 0)
+    public void Create_Monster()
+    {
+        // monster_count = GameObject.FindGameObjectsWithTag("Monster").Length;
+        for (int i = 0; i < monster.Count; i++)
         {
-            GameOver();                  // 생명이 없으므로 게임 오버메소드 호출
+            if (monster[i] == null)
+            {
+                int num1 = Random.Range(1, 8);
+                int num2 = Random.Range(1, 5);
+                monster[i] = (Instantiate(Monster_Prefabs, monster_location[num1 % 7] + Vector3.up * (num2 % 4), Quaternion.identity)); // 새로운 몬스터 생성 Quaternion.identity : 회전값 지정 - 불필요
+            }
         }
     }
 
@@ -117,9 +126,25 @@ public class GameManager : MonoBehaviour
         GameObject.Find("Canvas").transform.Find("ResultPanel").gameObject.SetActive(true); //결과화면 띄우기 // GameObject Canvas내부의 ResultPanel 패널을 찾아 띄우기.
     }
 
-    public void ReGame()
+    public void ReGame() // 다시시작 버튼 눌렀을때
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene("Game");    
+    }
+
+    public void countPlus() { count++; } // 적 처치 횟수 증가
+
+    public void ui()
+    {
+        //틀린경우 라이프 감소
+        if (life > 0)
+            Life[life].SetActive(false);     // 아까 life를 2로 초기화한 이유는 인덱스 값이 0 1 2 이므로 3번째 값을 호출할 때 2를 사용해서 2로 초기화 시킴.
+        // life--;                          // 인덱스 1 감소
+        Debug.Log("life : " + life);
+        //life == 0이 되면 게임오버
+        if (life < 0)
+        {
+            GameOver();                  // 생명이 없으므로 게임 오버메소드 호출
+        }
     }
 }

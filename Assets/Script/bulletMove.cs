@@ -41,13 +41,6 @@ public class bulletMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //        if (gameObject.tag.Length <= 3)
-        //       {
-        //            Invoke("Create_Bullet", Createspeed);
-        //            Invoke("Create_Bullet", Createspeed+0.3f);
-        //        }
-
-
         if (Input.GetMouseButtonDown(0)) // 마우스 좌클릭시
         {
             mousePos = Input.mousePosition;
@@ -68,34 +61,18 @@ public class bulletMove : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision) // 화살 제거
     {
-        if (collision.gameObject.tag == "TopBorder")
+        if (collision.gameObject.tag == "Border")
         {
-            Create_Bullet();
-            Destroy(gameObject);
-            // Debug.Log("이전 화살 제거");
-        }
-        if (collision.gameObject.tag == "Border" || collision.gameObject.tag == "rightBorder")
-        {
-            Create_Bullet();
             Destroy(gameObject);
             // Debug.Log("새로운 화살 생성 및 이전 화살 제거");
         }
             
         if (collision.gameObject.tag == "Monster")
         {
-            Create_Bullet(); // 화살은 충돌시 말고 1초마다 생성 - 1초는 테스트후 조정
             GameManager.Game.countPlus();
             // Debug.Log("Score : " + Score);
             Destroy(gameObject);
             Destroy(collision.gameObject);
         }
-    }
-
-    void Create_Bullet() // 새로운 화살 생성
-    {
-        // var AngleZ = -90f;
-        // 초기 위치(bulletPos)에 화살을 생성시키는 코드
-        var t = Instantiate(Bullet, bulletPos, Quaternion.identity); // 새로운 화살 생성 Quaternion.identity : 회전값 지정 - 불필요   
-        t.transform.Rotate(new Vector3(0, 0, 90f));
     }
 }

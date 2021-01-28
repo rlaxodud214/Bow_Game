@@ -9,7 +9,7 @@ public class Monster : MonoBehaviour
     public int life = 3;
     public int count = 7;
     public int maxMonsterCount = 10;
-    public float MonsterSpeed = 0.2f; // 몬스터 이동 속도
+    public float MonsterSpeed = 0.05f; // 몬스터 이동 속도
 
     // dynamic m, s, l, c;
 
