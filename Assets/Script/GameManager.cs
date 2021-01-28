@@ -20,7 +20,12 @@ public class GameManager : MonoBehaviour
     public Text monster_v;
     public Text score;
     public Text stage;
-    
+
+    public GameObject[] monster = new GameObject[9]; // 몬스터 오브젝트
+    public int[] monster_state = new int[9] { 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+    public Vector3[] monster_location = new Vector3[9]; 
+    public int monster_count = 0;
+
     #endregion
 
     #region Singleton                                 // 싱글톤 패턴은 하나의 인스턴스에 전역적인 접근을 시키며 보통 호출될 때 인스턴스화 되므로 사용하지 않는다면 생성되지도 않습니다.
@@ -44,7 +49,7 @@ public class GameManager : MonoBehaviour
         // LevelText.text = SceneChangeManager.SCENE.Level + " Back"; //n Back 텍스트 설정
         stage.text = "1"; //n Back 텍스트 설정
         score.text = bulletMove.bullet.Score.ToString(); //n Back 텍스트 설정
-        monster_v.text = "몬스터 속도 : 0.3f";
+        monster_v.text = "몬스터 속도 : 0.1f";
         //stage&life 변수 초기화
         life = 3;
     }

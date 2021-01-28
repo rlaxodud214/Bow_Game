@@ -9,12 +9,11 @@ public class Monster : MonoBehaviour
     public int life = 3;
     public int maxMonsterCount = 10;
     public float MonsterSpeed = 0.1f; // 몬스터 이동 속도
-    public GameObject[] monster = new GameObject[9]; // 몬스터 오브젝트
-    public int[] monster_state = new int[9] { 1, 1, 1, 1, 1, 1, 1, 1, 1};
-    public Vector3[] monster_location = new Vector3[9]; // { new Vector3(12f, 1.5f, 90f),
-    //                                                       new Vector3(12f, -1.5f, 90f),
-    //                                                       new Vector3(12f, -4.5f, 90f) };
-    public int monster_count = 0;
+
+    dynamic m = GameManager.Game.monster;
+    dynamic s = GameManager.Game.monster_state;
+    dynamic l = GameManager.Game.monster_location;
+    dynamic c = GameManager.Game.monster_count;
 
     private static Monster _sceneManager;          // 싱글톤 패턴을 사용하기 위한 인스턴스 변수, static 선언으로 어디서든 참조가 가능함
     public static Monster state                    // 객체에 접근하기 위한 속성으로 내부에 get set을 사용한다.
@@ -25,44 +24,50 @@ public class Monster : MonoBehaviour
     void Awake()                                               // Start()보다 먼저 실행
     {
         _sceneManager = GetComponent<Monster>();    // _sceneManager변수에 자신의 SceneChangeManager 컴포넌트를 넣는다.
+        for (int i = 0; i < l.Length; i++)
+        {
+            GameManager.Game.monster_location[i] = transform.position; // 몬스터들의 현재 위치를 받아온다.
+            // Debug.Log("monster_location[i] : " + GameManager.Game.monster_location[i]);
+        }
     }
     #endregion 
 
     void Start()
     {
-        for (int i = 0; i < monster_location.Length; i++)
+        for (int i = 0; i < l.Length; i++)
         {
-            monster_location[i] = monster[i].gameObject.transform.position; // 몬스터들의 현재 위치를 받아온다.
-            if (monster_state[i] == 1)
-                monster_count++;
-            // Debug.Log("monster_location[i] : " + monster_location[i]);
+            if (s[i] == 1)
+                c++;
         }
     }
 
     void Update()
     {
-        monster_count = 0;
-        for (int i = 0; i < monster.Length; i++)
-            if (monster_state[i] == 1)
-                monster_count++;
+        c = 0;
+        for (int i = 0; i < m.Length; i++)
+            if (s[i] == 1)
+                c++;
 
         // Debug.Log("남아있는 몬스터수 : " + GameObject.FindGameObjectsWithTag("Monster").Length); 
 
-        for (int i=0; i<monster.Length; i++)
+        for (int i=0; i<m.Length; i++)
         {
-            if(monster[i] == null)
+            if(m[i] == null)
             {
-                monster_state[i] = 0;
+                s[i] = 0;
             }
 
-            for (int j = 0; j < monster_state.Length; j++)
+            for (int j = 0; j < s.Length; j++)
             {
                 if (GameObject.FindGameObjectsWithTag("Monster").Length < maxMonsterCount)
                 {
                     int num = Random.Range(0, 30);
                     if (num%10 == 0) { 
-                        int num1 = Random.Range(0, 4);
-                        Instantiate(monster[i], monster_location[num%3]+Vector3.up*(num1%4), Quaternion.identity); // 새로운 몬스터 생성 Quaternion.identity : 회전값 지정 - 불필요   
+                        int num1 = Random.Range(1, 10);
+                        if (s[j] == 0) {
+                            m[j] = Instantiate(m[i], l[num%9]+Vector3.up*(num1%4), Quaternion.identity); // 새로운 몬스터 생성 Quaternion.identity : 회전값 지정 - 불필요   
+                            Debug.Log(num1);
+                        }
                     }
                     // else
                         // Debug.Log("num : " + num);
