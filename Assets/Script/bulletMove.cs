@@ -6,10 +6,10 @@ public class bulletMove : MonoBehaviour
 {
     #region Singleton  
 
-    public float speed = 25f;  // 화살이 날아갈 속도
+    public float speed = 20f;  // 화살이 날아갈 속도
     public float Createspeed = 0.5f; // 화살 생성 속도 관련
     public Vector3 bulletPos; // 화살 초기 위치(화살 생성 좌표값)
-    public Vector3 mousePos = GameManager.Game.monster_location[9]; // 마우스 클릭시 받아오는 좌표값 왼쪽으로 90도 회전했으므로 up이 아닌 right 사용
+    public Vector3 mousePos = Vector3.right; // 마우스 클릭시 받아오는 좌표값 왼쪽으로 90도 회전했으므로 up이 아닌 right 사용
     public Vector3 target = Vector3.right; // 마우스 클릭위치로 이동할 좌표값 왼쪽으로 90도 회전했으므로 up이 아닌 right 사용
     public int Score;
     
@@ -41,11 +41,11 @@ public class bulletMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-//        if (gameObject.tag.Length <= 3)
-//       {
-//            Invoke("Create_Bullet", Createspeed);
-//            Invoke("Create_Bullet", Createspeed+0.3f);
-//        }
+        //        if (gameObject.tag.Length <= 3)
+        //       {
+        //            Invoke("Create_Bullet", Createspeed);
+        //            Invoke("Create_Bullet", Createspeed+0.3f);
+        //        }
 
 
         if (Input.GetMouseButtonDown(0)) // 마우스 좌클릭시
@@ -93,7 +93,7 @@ public class bulletMove : MonoBehaviour
 
     void Create_Bullet() // 새로운 화살 생성
     {
-        var AngleZ = -90f;
+        // var AngleZ = -90f;
         // 초기 위치(bulletPos)에 화살을 생성시키는 코드
         var t = Instantiate(Bullet, bulletPos, Quaternion.identity); // 새로운 화살 생성 Quaternion.identity : 회전값 지정 - 불필요   
         t.transform.Rotate(new Vector3(0, 0, 90f));

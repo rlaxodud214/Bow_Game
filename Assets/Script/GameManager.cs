@@ -21,9 +21,10 @@ public class GameManager : MonoBehaviour
     public Text score;
     public Text stage;
 
-    public GameObject[] monster = new GameObject[9]; // 몬스터 오브젝트
-    public int[] monster_state = new int[9] { 1, 1, 1, 1, 1, 1, 1, 1, 1 };
-    public Vector3[] monster_location = new Vector3[9]; 
+    // 몬스터 오브젝트
+    public List<GameObject> monster = new List<GameObject>();
+    public int[] monster_state = new int[7] { 1, 1, 1, 1, 1, 1, 1 };
+    public Vector3[] monster_location = new Vector3[7]; 
     public int monster_count = 0;
 
     #endregion
@@ -40,6 +41,13 @@ public class GameManager : MonoBehaviour
     void Awake()                                      // 제일 처음 호출되는 함수
     {
         _gManager = GetComponent<GameManager>();      // _gManager라는 변수에 자신의 GameManager 컴포넌트를 참조하는 값을 저장, Game속성에 set코드를 짜면 다르게 대입가능
+        int n = GameObject.FindGameObjectsWithTag("Monster").Length;
+        Debug.Log(n);
+        for(int i=0; i<n; i++)
+        {
+            monster.Add(GameObject.FindGameObjectsWithTag("Monster")[i]);
+            monster_location[i] = monster[i].transform.position;
+        }
     }
     #endregion
 
@@ -49,20 +57,36 @@ public class GameManager : MonoBehaviour
         // LevelText.text = SceneChangeManager.SCENE.Level + " Back"; //n Back 텍스트 설정
         stage.text = "1"; //n Back 텍스트 설정
         score.text = bulletMove.bullet.Score.ToString(); //n Back 텍스트 설정
-        monster_v.text = "몬스터 속도 : 0.1f";
+        monster_v.text = "몬스터 속도 : 0.05f";
         //stage&life 변수 초기화
         life = 3;
     }
 
     void Update()
     {
+        monster_count = GameObject.FindGameObjectsWithTag("Monster").Length;
         monster_v.text = "몬스터 속도 : " + Monster.state.MonsterSpeed.ToString() + "f";
+        for (int i = 0; i < 7; i++) {
+            monster_state[i] = 0;
+            if (monster[i] != null)
+            {
+                monster_state[i] = 1;
+            }
+            if (monster_count < 6)
+            {
+                int num1 = Random.Range(1, 8);
+                int num2 = Random.Range(1, 5);
+                monster[i] = Instantiate(monster[0], monster_location[num1 % 7] + Vector3.up * (num2 % 4), Quaternion.identity); // 새로운 몬스터 생성 Quaternion.identity : 회전값 지정 - 불필요
+            }
+        }
     }
+
     public void countPlus() { count++; } // 적 처치 횟수 증가
 
     public void ui() { 
         //틀린경우 라이프 감소
-        Life[life].SetActive(false);     // 아까 life를 2로 초기화한 이유는 인덱스 값이 0 1 2 이므로 3번째 값을 호출할 때 2를 사용해서 2로 초기화 시킴.
+        if(life > 0)
+            Life[life].SetActive(false);     // 아까 life를 2로 초기화한 이유는 인덱스 값이 0 1 2 이므로 3번째 값을 호출할 때 2를 사용해서 2로 초기화 시킴.
         life--;                          // 인덱스 1 감소
         Debug.Log("life : " + life);
         //life == 0이 되면 게임오버
