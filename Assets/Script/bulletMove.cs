@@ -6,17 +6,15 @@ public class bulletMove : MonoBehaviour
 {
     #region Singleton  
 
-    public float speed = 20f;  // 화살이 날아갈 속도
-    public float Createspeed = 0.5f; // 화살 생성 속도 관련
-    public Vector3 bulletPos; // 화살 초기 위치(화살 생성 좌표값)
-    public Vector3 mousePos = Vector3.right; // 마우스 클릭시 받아오는 좌표값 왼쪽으로 90도 회전했으므로 up이 아닌 right 사용
-    public Vector3 target = Vector3.right; // 마우스 클릭위치로 이동할 좌표값 왼쪽으로 90도 회전했으므로 up이 아닌 right 사용
-    public int Score;
-    
+    public float speed = 10f;  // 화살이 날아갈 속도
     public GameObject Bullet; // 화살
-    //public Sprite BulletSprite; // 화살 이미지 - 아직 미사용
 
-    Camera Camera;
+    // 슬라이더 값에 따라 회전하게 하기
+    float slider_value;   // 처리전 슬라이더 값
+    float Rotation_angle; // 처리후 회전각
+    float map = 1f;            // 슬라이더 벨류범위 0~100을 각도로 mapping 시키기 위한 변수
+
+    
 
     private static bulletMove _sceneManager;          // 싱글톤 패턴을 사용하기 위한 인스턴스 변수, static 선언으로 어디서든 참조가 가능함
     public static bulletMove bullet                    // 객체에 접근하기 위한 속성으로 내부에 get set을 사용한다.
@@ -27,41 +25,30 @@ public class bulletMove : MonoBehaviour
     void Awake()                                               // Start()보다 먼저 실행
     {
         _sceneManager = GetComponent<bulletMove>();    // _sceneManager변수에 자신의 SceneChangeManager 컴포넌트를 넣는다.
-        Score = 0;
     }
     #endregion 
 
     void Start()
     {
-        bulletPos = Bullet.gameObject.transform.position; // 화살의 현재 위치를 받아온다.
-        // Debug.Log(bulletPos);
-        Camera = GameObject.Find("MainCamera").GetComponent<Camera>(); // game 화면의 좌표값을 월드 좌표값으로 변경해주는 코드1
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0)) // 마우스 좌클릭시
-        {
-            mousePos = Input.mousePosition;
-            mousePos = Camera.ScreenToWorldPoint(mousePos); // game 화면의 좌표값을 월드 좌표값으로 변경해주는 코드2
-            Debug.Log(mousePos);
-        }
+        slider_value = GameManager.Game.slider.value; // 처리전 슬라이더 값
+        Rotation_angle = 140 - slider_value;
+        transform.localEulerAngles = new Vector3(0, 0, Rotation_angle);
 
-        transform.Translate(Vector3.right * speed * Time.deltaTime);
-        // 회전까지 적용할 시에
-        //target = new Vector3(mousePos.x, mousePos.y, // 마우스클릭 위치의 y축 값만 대입시켜주면 된다.
-        //                     Bullet.transform.position.z);
-
-        target = new Vector3(mousePos.x, Bullet.transform.position.y, // 마우스클릭 위치의 y축 값만 대입시켜주면 된다.
-                             Bullet.transform.position.z);
-
-        transform.position = Vector3.Lerp(gameObject.transform.position, target, 1f);
+        // transform.position = Vector3.up * speed * Time.deltaTime;
+        transform.Translate(transform.right * speed * Time.deltaTime);        
+        // transform.Translate(transform.up * speed * Time.deltaTime);        
     }
 
     void OnTriggerEnter2D(Collider2D collision) // 화살 제거
     {
-        if (collision.gameObject.tag == "Border")
+        // Arrow_Destory : 위에 생성된 몬스터가 화면에 나타나기전에 미리 명중되는 것을 막기위해
+        if (collision.gameObject.tag == "Border" || collision.gameObject.tag == "Arrow_Destory")
         {
             Destroy(gameObject);
             // Debug.Log("새로운 화살 생성 및 이전 화살 제거");

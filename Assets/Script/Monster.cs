@@ -36,11 +36,7 @@ public class Monster : MonoBehaviour
 
     void Start()
     {
-        //for (int i = 0; i < count; i++)
-        //{
-        //    if (s[i] == 1)
-        //        c++;
-        //}
+
     }
     // 1 : 몬스터 2초마다 스폰, 2 : 몬스터 1.5초마다 스폰, 3 : 몬스터 1초마다 스폰, 4 : 몬스터 0.7초마다 스폰
     void Update()

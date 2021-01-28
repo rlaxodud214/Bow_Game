@@ -19,20 +19,29 @@ public class GameManager : MonoBehaviour
     public int count = 0;
     public Text score;
     public Text stage;
-    public float time;
+
+    // 활, 몬스터 생성관련 변수들
+    public float time; // Time.deltatime값 누적하는 변수
     public float nextTime_Arrow = 0.0f;
-    public float Timeplus_Arrow = 1.0f; // 화살 생성 주기 현재 : 0.7초
+    public float Timeplus_Arrow = 1.0f; // 화살 생성 주기 현재 : 1.0초
     public GameObject Arrow_Prefabs;  // 화살 복제시 사용할 프리팹
     public GameObject Arrow; // 화살 // bulletPos값을 저장하기 위해 초기 화살 오브젝트 변수 생성
     public Vector3 ArrowPos; // 화살 초기 위치(화살 생성 좌표값)
 
     public float nextTime_Monster = 0.0f;
     public float Timeplus_Monster = 1.5f; // 몬스터 생성 주기 현재 : 1.5초
-        // 몬스터 오브젝트
+    // 몬스터 오브젝트
     public GameObject Monster_Prefabs;  // 몬스터 복제시 사용할 프리팹
     public List<GameObject> monster = new List<GameObject>();
     public Vector3[] monster_location = new Vector3[7]; // 몬스터 생성시 위치 배열
     public int monster_count = 0;
+
+    // 슬라이더 이벤트를 처리하는 2가지 방법
+    // 1. 슬라이더의 값이 바뀔때, 함수를 호출하는 방법 -> 사용
+    // 2. 스트립트에서 슬라이더에 접근해서 처리하는 방식
+
+    // 슬라이더 관련
+    public Slider slider; // 0 ~ 100 정수값 slider.value
 
     #endregion
 
@@ -52,12 +61,12 @@ public class GameManager : MonoBehaviour
         {
             monster.Add(GameObject.FindGameObjectsWithTag("Monster")[i]);
             monster_location[i] = monster[i].transform.position;
+            Destroy(monster[i]);
         }
         Arrow = GameObject.FindGameObjectsWithTag("Arrow")[0];
         ArrowPos = Arrow.gameObject.transform.position; // 화살의 현재 위치를 받아온다.
 
         stage.text = "1"; //n Back 텍스트 설정
-        score.text = bulletMove.bullet.Score.ToString(); //n Back 텍스트 설정
         //stage&life 변수 초기화
         life = 3;
     }
@@ -66,28 +75,34 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        nextTime_Arrow += Timeplus_Arrow; // 제일 처음 화살과 겹쳐서 1초 이후에 부터 1초마다 생성시키기 위함
+        // slider = GetComponent<Slider>();
     }
     // 화살은 충돌시 말고 1초마다 생성 - 1초는 테스트후 조정
     void Update()
     {
+        Debug.Log(slider.value); // 값 확인용
+        // (a, b, v) : a에서 b값으로 v만큼 이동하는 코드
+        // slider.value = Mathf.MoveTowards(slider.value, 1.0f, 0.01f);
+        
         time += Time.deltaTime;
         // 1초마다 실행 - 화살 생성
         if (time > nextTime_Arrow)
         {
+            // Debug.Log("화살 생성 : " + time);
             Create_Bullet();
             nextTime_Arrow += Timeplus_Arrow; // Timeplus : 몬스터 생성주기
         }
 
         // 1.5초마다 실행 - 몬스터 생성
         if (time > nextTime_Monster) {
+            // Debug.Log("몬스터 생성 : " + time);
             Create_Monster();
             nextTime_Monster += Timeplus_Monster; // Timeplus : 몬스터 생성주기
         }
     }
     void Create_Bullet() // 새로운 화살 생성
     {
-        // var AngleZ = -90f;
         // 초기 위치(bulletPos)에 화살을 생성시키는 코드
         var t = Instantiate(Arrow_Prefabs, ArrowPos, Quaternion.identity); // 새로운 화살 생성 Quaternion.identity : 회전값 지정 - 불필요   
         t.transform.Rotate(new Vector3(0, 0, 90f));
@@ -101,8 +116,9 @@ public class GameManager : MonoBehaviour
             if (monster[i] == null)
             {
                 int num1 = Random.Range(1, 8);
-                int num2 = Random.Range(1, 5);
-                monster[i] = (Instantiate(Monster_Prefabs, monster_location[num1 % 7] + Vector3.up * (num2 % 4), Quaternion.identity)); // 새로운 몬스터 생성 Quaternion.identity : 회전값 지정 - 불필요
+                int num2 = Random.Range(1, 8);
+                monster[i] = (Instantiate(Monster_Prefabs, monster_location[num1 % 7] + Vector3.up * (num2 % 7), Quaternion.identity)); // 새로운 몬스터 생성 Quaternion.identity : 회전값 지정 - 불필요
+                return;
             }
         }
     }
