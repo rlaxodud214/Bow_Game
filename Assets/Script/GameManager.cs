@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
     // 활, 몬스터 생성관련 변수들
     public float time; // Time.deltatime값 누적하는 변수
     public float nextTime_Arrow = 0.0f;
-    public float Timeplus_Arrow = 1.0f; // 화살 생성 주기 현재 : 1.0초
+    public float Timeplus_Arrow = 0.8f; // 화살 생성 주기 현재 : 1.0초
     public GameObject Arrow_Prefabs;  // 화살 복제시 사용할 프리팹
     public GameObject Arrow; // 화살 // bulletPos값을 저장하기 위해 초기 화살 오브젝트 변수 생성
     public Vector3 ArrowPos; // 화살 초기 위치(화살 생성 좌표값)
@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour
     // 몬스터 오브젝트
     public GameObject Monster_Prefabs;  // 몬스터 복제시 사용할 프리팹
     public List<GameObject> monster = new List<GameObject>();
-    public Vector3[] monster_location = new Vector3[7]; // 몬스터 생성시 위치 배열
+    public Transform[] spawnPoints; // 몬스터 생성시 위치 배열
     public int monster_count = 0;
 
     // 슬라이더 이벤트를 처리하는 2가지 방법
@@ -47,25 +47,22 @@ public class GameManager : MonoBehaviour
 
     #region Singleton                                 // 싱글톤 패턴은 하나의 인스턴스에 전역적인 접근을 시키며 보통 호출될 때 인스턴스화 되므로 사용하지 않는다면 생성되지도 않습니다.
 
-    private static GameManager _gManager;             // 싱글톤 객체 선언, 어디에서든지 접근할 수 있도록 하기위해 
+    private static GameManager _Instance;             // 싱글톤 객체 선언, 어디에서든지 접근할 수 있도록 하기위해 
 
-    public static GameManager Game                    // 객체에 접근하기 위한 속성으로 내부에 get set을 사용한다.
+    public static GameManager Instance                    // 객체에 접근하기 위한 속성으로 내부에 get set을 사용한다.
     {
-        get { return _gManager; }                     // GameManager 객체 리턴
+        get { return _Instance; }                     // GameManager 객체 리턴
     }
 
     void Awake()                                      // 제일 처음 호출되는 함수
     {
-        _gManager = GetComponent<GameManager>();      // _gManager라는 변수에 자신의 GameManager 컴포넌트를 참조하는 값을 저장, Game속성에 set코드를 짜면 다르게 대입가능
-        for(int i=0; i<7; i++)
-        {
-            monster.Add(GameObject.FindGameObjectsWithTag("Monster")[i]);
-            monster_location[i] = monster[i].transform.position;
-            Destroy(monster[i]);
-        }
+        _Instance = GetComponent<GameManager>();      // _gManager라는 변수에 자신의 GameManager 컴포넌트를 참조하는 값을 저장, Game속성에 set코드를 짜면 다르게 대입가능
         Arrow = GameObject.FindGameObjectsWithTag("Arrow")[0];
         ArrowPos = Arrow.gameObject.transform.position; // 화살의 현재 위치를 받아온다.
-
+        for(int i = 0; i < 10; i++)
+        {
+            monster.Add(null);
+        }
         stage.text = "1"; //n Back 텍스트 설정
         //stage&life 변수 초기화
         life = 3;
@@ -115,9 +112,11 @@ public class GameManager : MonoBehaviour
         {
             if (monster[i] == null)
             {
-                int num1 = Random.Range(1, 8);
-                int num2 = Random.Range(1, 8);
-                monster[i] = (Instantiate(Monster_Prefabs, monster_location[num1 % 7] + Vector3.up * (num2 % 7), Quaternion.identity)); // 새로운 몬스터 생성 Quaternion.identity : 회전값 지정 - 불필요
+                int x = Random.Range(3, 6);
+                int y = Random.Range(1, 8);
+                monster[i] = Instantiate(Monster_Prefabs, 
+                    spawnPoints[x % 7].position + Vector3.up * (y % 7)
+                    , Quaternion.identity); // 새로운 몬스터 생성 Quaternion.identity : 회전값 지정 - 불필요
                 return;
             }
         }
