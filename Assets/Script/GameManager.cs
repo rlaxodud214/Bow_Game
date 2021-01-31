@@ -45,7 +45,12 @@ public class GameManager : MonoBehaviour
     public int[] stage_up = new int[5] { 4, 9, 15, 21, 28 }; // 테스트용
     public float[] Monster_Spawn = new float[5] { 2.0f, 1.7f, 1.3f, 1.0f, 0.7f }; // 실제
     public float[] Arrow_Spawn = new float[5] { 0.9f, 0.8f, 0.7f, 0.6f, 0.5f }; // 실제
-
+    
+    List<List<int>> Row = 
+        new List<List<int>>() {  new List<int> { 0, 0 }, new List<int> { 0, 0 },
+                                 new List<int> { 0, 0 }, new List<int> { 2, 5 },  // 3라인
+                                 new List<int> { 0, 0 }, new List<int> { 1, 6 },  // 5라인
+                                 new List<int> { 0, 0 }, new List<int> { 0, 7 } }; // 7라인
     // 슬라이더 이벤트를 처리하는 2가지 방법
     // 1. 슬라이더의 값이 바뀔때, 함수를 호출하는 방법
     // 2. 스트립트에서 슬라이더에 접근해서 처리하는 방식 -> 사용
@@ -133,6 +138,7 @@ public class GameManager : MonoBehaviour
             if (count <= stage_up[i]) {
                 Timeplus_Monster = Monster_Spawn[i];
                 Timeplus_Arrow = Arrow_Spawn[i];
+                break;
             }
         }
         if (count > stage_up[4]) {
@@ -145,7 +151,13 @@ public class GameManager : MonoBehaviour
         {
             if (monster[i] == null)
             {
-                int x = Random.Range(2, 5);
+                int x = Random.Range(Row[3][0], Row[3][1]); // 디폴트는 3라인
+
+                if (Timeplus_Arrow == 0.6f)
+                    x = Random.Range(Row[5][0], Row[5][1]); // 스테이지3단계면 5라인
+                else if (Timeplus_Arrow == 0.4f)
+                    x = Random.Range(Row[7][0], Row[7][1]); // 스테이지3단계면 7라인
+
                 int y = Random.Range(1, 8);
                 monster[i] = Instantiate(Monster_Prefabs, 
                     spawnPoints[x % 7].position + Vector3.up * (y % 7)
@@ -154,13 +166,16 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-    //public void SpriteChange()
-    //{
-    //    SpriteChange2();
-    //    Invoke("SpriteChange1", 0.1f);
-    //    Invoke("SpriteChang01", 0.2f);
-    //}
-    //public void SpriteChange2() { spriteRenderer.sprite = sprites[2]; }
-    //public void SpriteChange1() { spriteRenderer.sprite = sprites[1]; }
-    //public void SpriteChange0() { spriteRenderer.sprite = sprites[0]; }
 }
+
+
+// 활쏠 때 스프라이트 변경하는 코드 - 비활성 - 적용 안됌
+//public void SpriteChange()
+//{
+//    SpriteChange2();
+//    Invoke("SpriteChange1", 0.1f);
+//    Invoke("SpriteChang01", 0.2f);
+//}
+//public void SpriteChange2() { spriteRenderer.sprite = sprites[2]; }
+//public void SpriteChange1() { spriteRenderer.sprite = sprites[1]; }
+//public void SpriteChange0() { spriteRenderer.sprite = sprites[0]; }
