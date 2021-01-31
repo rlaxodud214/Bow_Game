@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;                       
+                     
 /*
  * 게임 매니저 스크립트
  */
@@ -20,7 +20,11 @@ public class GameManager : MonoBehaviour
     public Text score;
     public Text stage;
 
-    // 활, 몬스터 생성관련 변수들
+    // 활 스프라이트 변경
+    public Sprite[] sprites;
+    SpriteRenderer spriteRenderer;
+
+    // 화살, 몬스터 생성관련 변수들
     public float time; // Time.deltatime값 누적하는 변수
     public float nextTime_Arrow = 0.0f;
     public float Timeplus_Arrow = 0.8f; // 화살 생성 주기 현재 : 1.0초
@@ -29,12 +33,18 @@ public class GameManager : MonoBehaviour
     public Vector3 ArrowPos; // 화살 초기 위치(화살 생성 좌표값)
 
     public float nextTime_Monster = 0.0f;
-    public float Timeplus_Monster = 1.5f; // 몬스터 생성 주기 현재 : 1.5초
+    public float Timeplus_Monster = 2.0f; // 몬스터 생성 주기 현재 : 1.5초
     // 몬스터 오브젝트
     public GameObject Monster_Prefabs;  // 몬스터 복제시 사용할 프리팹
     public List<GameObject> monster = new List<GameObject>();
     public Transform[] spawnPoints; // 몬스터 생성시 위치 배열
     public int monster_count = 0;
+
+    // 스테이지 클리어 조건 몬스터 수 배열
+    // public int[] stage_up = new int[5] { 40, 90, 150, 210, 280 }; // 실제
+    public int[] stage_up = new int[5] { 4, 9, 15, 21, 28 }; // 테스트용
+    public float[] Monster_Spawn = new float[5] { 2.0f, 1.7f, 1.3f, 1.0f, 0.7f }; // 실제
+    public float[] Arrow_Spawn = new float[5] { 0.9f, 0.8f, 0.7f, 0.6f, 0.5f }; // 실제
 
     // 슬라이더 이벤트를 처리하는 2가지 방법
     // 1. 슬라이더의 값이 바뀔때, 함수를 호출하는 방법
@@ -66,6 +76,7 @@ public class GameManager : MonoBehaviour
         stage.text = "1"; //n Back 텍스트 설정
         //stage&life 변수 초기화
         life = 3;
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
     #endregion
 
@@ -78,27 +89,34 @@ public class GameManager : MonoBehaviour
     // 화살은 충돌시 말고 1초마다 생성 - 1초는 테스트후 조정
     void Update()
     {
-        // Debug.Log(slider.value); // 값 확인용
-        // (a, b, v) : a에서 b값으로 v만큼 이동하는 코드
-        // slider.value = Mathf.MoveTowards(slider.value, 1.0f, 0.01f);
-        
         time += Time.deltaTime;
+        Create_Object();
+    }
+
+    public void countPlus() { count++; } // 몬스터 처치 횟수 증가
+
+    void Create_Object() // 화살, 몬스터 생성코드
+    {
         // 1초마다 실행 - 화살 생성
         if (time > nextTime_Arrow)
         {
             // Debug.Log("화살 생성 : " + time);
             Create_Bullet();
             nextTime_Arrow += Timeplus_Arrow; // Timeplus : 몬스터 생성주기
+
+            //SpriteChange();
         }
 
         // 1.5초마다 실행 - 몬스터 생성
-        if (time > nextTime_Monster) {
+        if (time > nextTime_Monster)
+        {
             // Debug.Log("몬스터 생성 : " + time);
             Create_Monster();
             nextTime_Monster += Timeplus_Monster; // Timeplus : 몬스터 생성주기
         }
     }
-    void Create_Bullet() // 새로운 화살 생성
+
+    public void Create_Bullet() // 새로운 화살 생성
     {
         // 초기 위치(bulletPos)에 화살을 생성시키는 코드
         var t = Instantiate(Arrow_Prefabs, ArrowPos, Quaternion.identity); // 새로운 화살 생성 Quaternion.identity : 회전값 지정 - 불필요   
@@ -107,12 +125,27 @@ public class GameManager : MonoBehaviour
 
     public void Create_Monster()
     {
+        // stage_up = new int[5] { 40, 90, 150, 210, 280 };
+        // Monster_Spawn = new float[5] { 2.0f, 1.7f, 1.3f, 1.0f, 0.7f }; // 실제
+        // Arrow_Spawn = new float[5] { 0.9f, 0.8f, 0.7f, 0.6f, 0.5f }; // 실제
+
+        for(int i=0; i< stage_up.Length; i++)  {
+            if (count <= stage_up[i]) {
+                Timeplus_Monster = Monster_Spawn[i];
+                Timeplus_Arrow = Arrow_Spawn[i];
+            }
+        }
+        if (count > stage_up[4]) {
+            Timeplus_Monster = 0.7f - count*0.001f;
+            Timeplus_Arrow = 0.4f;
+        }
+
         // monster_count = GameObject.FindGameObjectsWithTag("Monster").Length;
         for (int i = 0; i < monster.Count; i++)
         {
             if (monster[i] == null)
             {
-                int x = Random.Range(3, 6);
+                int x = Random.Range(2, 5);
                 int y = Random.Range(1, 8);
                 monster[i] = Instantiate(Monster_Prefabs, 
                     spawnPoints[x % 7].position + Vector3.up * (y % 7)
@@ -121,45 +154,13 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-
-    public void GameOver() //게임오버+결과화면 함수
-    {
-        Time.timeScale = 0f;
-
-        if (count > 40)
-            stage.text = "2";
-        else if (count > 90)
-            stage.text = "3";
-        else if (count > 150)
-            stage.text = "4";
-        else if (count > 210)
-            stage.text = "5";
-        else if (count > 280)
-            stage.text = "6";
-        score.text = count.ToString();
-        
-        GameObject.Find("Canvas").transform.Find("ResultPanel").gameObject.SetActive(true); //결과화면 띄우기 // GameObject Canvas내부의 ResultPanel 패널을 찾아 띄우기.
-    }
-
-    public void ReGame() // 다시시작 버튼 눌렀을때
-    {
-        Time.timeScale = 1f;
-        SceneManager.LoadScene("Game");    
-    }
-
-    public void countPlus() { count++; } // 적 처치 횟수 증가
-
-    public void ui()
-    {
-        //틀린경우 라이프 감소
-        if (life > 0)
-            Life[life].SetActive(false);     // 아까 life를 2로 초기화한 이유는 인덱스 값이 0 1 2 이므로 3번째 값을 호출할 때 2를 사용해서 2로 초기화 시킴.
-        // life--;                          // 인덱스 1 감소
-        Debug.Log("life : " + life);
-        //life == 0이 되면 게임오버
-        if (life < 0)
-        {
-            GameOver();                  // 생명이 없으므로 게임 오버메소드 호출
-        }
-    }
+    //public void SpriteChange()
+    //{
+    //    SpriteChange2();
+    //    Invoke("SpriteChange1", 0.1f);
+    //    Invoke("SpriteChang01", 0.2f);
+    //}
+    //public void SpriteChange2() { spriteRenderer.sprite = sprites[2]; }
+    //public void SpriteChange1() { spriteRenderer.sprite = sprites[1]; }
+    //public void SpriteChange0() { spriteRenderer.sprite = sprites[0]; }
 }

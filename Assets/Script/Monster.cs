@@ -38,27 +38,7 @@ public class Monster : MonoBehaviour
     // 1 : 몬스터 2초마다 스폰, 2 : 몬스터 1.5초마다 스폰, 3 : 몬스터 1초마다 스폰, 4 : 몬스터 0.7초마다 스폰
     void Update()
     {
-        int count = GameManager.Instance.count;
-        if (count >= 40)
-        {
-            MonsterSpeed = 0.1f + (count - 40) * 0.002f;
-        }
-        else if (count >= 90)
-        {
-            MonsterSpeed = 0.3f + (count - 90) * 0.003f;
-        }
-        else if (count >= 150)
-        {
-            MonsterSpeed = 0.6f + (count - 150) * 0.003f;
-        }
-        else if (count >= 210)
-        {
-            MonsterSpeed = 0.9f + (count - 210) * 0.003f;
-        }
-        else if (count >= 280)
-        {
-            MonsterSpeed = 1.2f + (count - 280) * 0.003f;
-        }
+        int count = GameManager.Instance.count; // 잡은 몬스터 수
 
         Vector3 curPos = transform.position;
         Vector3 nextPos = Vector3.down * MonsterSpeed;
@@ -73,7 +53,7 @@ public class Monster : MonoBehaviour
        
         if (collision.gameObject.tag == "Life")
         {
-            GameManager.Instance.ui();
+            UIManager.Instance.ui();
             Destroy(gameObject);
         }
 
