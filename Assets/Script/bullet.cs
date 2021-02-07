@@ -6,15 +6,14 @@ public class bullet : MonoBehaviour
 {
     #region Singleton  
 
-    public float speed = 10f;  // 화살이 날아갈 속도
+    public float speed = 5f;  // 화살이 날아갈 속도->??
     public GameObject Bullet; // 화살
 
     // 슬라이더 값에 따라 회전하게 하기
+    float time = 0f;
     float slider_value;   // 처리전 슬라이더 값
     float Rotation_angle; // 처리후 회전각
-    float map = 1f;            // 슬라이더 벨류범위 0~100을 각도로 mapping 시키기 위한 변수
-
-    
+       
 
     private static bullet _Instance;          // 싱글톤 패턴을 사용하기 위한 인스턴스 변수, static 선언으로 어디서든 참조가 가능함
     public static bullet Instance                    // 객체에 접근하기 위한 속성으로 내부에 get set을 사용한다.
@@ -36,14 +35,16 @@ public class bullet : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        time += Time.deltaTime;
         slider_value = GameManager.Instance.slider.value; // 처리전 슬라이더 값
-        Rotation_angle = 140 - slider_value;
+        Rotation_angle = 180 - slider_value; //40 ~ 140 -> 20 ~ 160 0 - 140 x - ? = 90
         // transform.localEulerAngles = new Vector3(0, 0, Rotation_angle);
-        transform.eulerAngles = new Vector3(0, 0, Rotation_angle);
-        // transform.position = Vector3.up * speed * Time.deltaTime;
-        // transform.Translate(transform.right * speed * Time.deltaTime);
-        transform.Translate(transform.up *-1f * speed * Time.deltaTime);  
-        Debug.Log("회전값 : " + Rotation_angle);
+        if (time < 0.2f)
+            //transform.localEulerAngles = new Vector3(0, 0, Rotation_angle);
+            transform.rotation = Quaternion.Euler(0, 0, Rotation_angle);
+        transform.Translate(Vector3.left * -1f * speed * Time.deltaTime, Space.Self);  //(0,1,0)
+        // Debug.Log("회전값 : " + Rotation_angle);
+        // Debug.Log("회전값 : " + transform.localEulerAngles);
     }
 
     void OnTriggerEnter2D(Collider2D collision) // 화살 제거
@@ -58,6 +59,7 @@ public class bullet : MonoBehaviour
         {
             GameManager.Instance.countPlus();
             // Debug.Log("Score : " + Score);
+            SoundManager.Instance.Monster_die();
             Destroy(gameObject);
             Destroy(collision.gameObject);
         }

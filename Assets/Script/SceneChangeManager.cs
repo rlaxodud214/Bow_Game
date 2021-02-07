@@ -22,20 +22,39 @@ public class SceneChangeManager : MonoBehaviour
     }
     #endregion
 
-    public void RePlay() // 다시시작 버튼을 눌렀을때
+    public void RePlay_inGame() // 다시시작 버튼을 눌렀을때
     {
+        SoundManager.Instance.Btn_Click();
         Time.timeScale = 1f;
         SceneManager.LoadScene("Game");
     }
 
+    public void RePlay_inTuto() // 다시시작 버튼을 눌렀을때
+    {
+        SoundManager.Instance.Btn_Click();
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("Tuto");
+    }
+
     public void Home() // 홈 버튼을 눌렀을때
     {
-        GameObject.Find("Canvas").transform.Find("PausePanel").gameObject.SetActive(false); // 일시정지 화면 false
+        SoundManager.Instance.Btn_Click();
         SceneManager.LoadScene("Main");
     }
 
     public void Tutorial() // 홈 버튼을 눌렀을때
     {
-        // SceneManager.LoadScene("Tutorial");
+        SoundManager.Instance.Btn_Click();
+        SceneManager.LoadScene("Tuto");
+    }
+
+    public void GameExit() // 종료하기 버튼을 눌렀을때
+    {
+        SoundManager.Instance.Btn_Click();
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+                        Application.Quit(); // 어플리케이션 종료
+#endif
     }
 }

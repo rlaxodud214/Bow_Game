@@ -21,8 +21,8 @@ public class GameManager : MonoBehaviour
     public Text stage;
 
     // 활 스프라이트 변경
-    public Sprite[] sprites;
-    SpriteRenderer spriteRenderer;
+    // public Sprite[] sprites;
+    // SpriteRenderer spriteRenderer;
 
     // 화살, 몬스터 생성관련 변수들
     public float time; // Time.deltatime값 누적하는 변수
@@ -41,10 +41,10 @@ public class GameManager : MonoBehaviour
     public int monster_count = 0;
 
     // 스테이지 클리어 조건 몬스터 수 배열
-    // public int[] stage_up = new int[5] { 40, 90, 150, 210, 280 }; // 실제
-    public int[] stage_up = new int[5] { 4, 9, 15, 21, 28 }; // 테스트용
-    public float[] Monster_Spawn = new float[5] { 2.0f, 1.7f, 1.3f, 1.0f, 0.7f }; // 실제
-    public float[] Arrow_Spawn = new float[5] { 0.9f, 0.8f, 0.7f, 0.6f, 0.5f }; // 실제
+    public int[] stage_up = new int[5] { 40, 90, 150, 210, 280 }; // 실제
+    // public int[] stage_up = new int[5] { 4, 9, 15, 21, 28 }; // 테스트용
+    public float[] Monster_Spawn = new float[5] { 2.0f, 1.9f, 1.8f, 1.65f, 1.5f }; // 실제
+    public float[] Arrow_Spawn = new float[5] { 1.0f, 0.95f, 0.9f, 0.85f, 0.8f }; // 실제
     
     List<List<int>> Row = 
         new List<List<int>>() {  new List<int> { 0, 0 }, new List<int> { 0, 0 },
@@ -72,16 +72,15 @@ public class GameManager : MonoBehaviour
     void Awake()                                      // 제일 처음 호출되는 함수
     {
         _Instance = GetComponent<GameManager>();      // _gManager라는 변수에 자신의 GameManager 컴포넌트를 참조하는 값을 저장, Game속성에 set코드를 짜면 다르게 대입가능
-        Arrow = GameObject.FindGameObjectsWithTag("Arrow")[0];
         ArrowPos = Arrow.gameObject.transform.position; // 화살의 현재 위치를 받아온다.
         for(int i = 0; i < 10; i++)
         {
             monster.Add(null);
         }
-        stage.text = "1"; //n Back 텍스트 설정
+        stage.text = "1";
         //stage&life 변수 초기화
         life = 3;
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        // spriteRenderer = GetComponent<SpriteRenderer>();
     }
     #endregion
 
@@ -124,7 +123,8 @@ public class GameManager : MonoBehaviour
     public void Create_Bullet() // 새로운 화살 생성
     {
         // 초기 위치(bulletPos)에 화살을 생성시키는 코드
-        var t = Instantiate(Arrow_Prefabs, ArrowPos, Quaternion.identity); // 새로운 화살 생성 Quaternion.identity : 회전값 지정 - 불필요   
+        // var t = Instantiate(Arrow_Prefabs, ArrowPos, Quaternion.identity, GameObject.Find("Canvas").transform.Find("GameObject").transform); // 새로운 화살 생성 Quaternion.identity : 회전값 지정 - 불필요   
+        var t = Instantiate(Arrow_Prefabs, ArrowPos, Quaternion.identity); //, GameObject.Find("Canvas").transform); // 새로운 화살 생성 Quaternion.identity : 회전값 지정 - 불필요   
         t.transform.Rotate(new Vector3(0, 0, 90f));
     }
 
@@ -151,31 +151,19 @@ public class GameManager : MonoBehaviour
         {
             if (monster[i] == null)
             {
-                int x = Random.Range(Row[3][0], Row[3][1]); // 디폴트는 3라인
+                //int x = Random.Range(Row[3][0], Row[3][1]); // 디폴트는 3라인
 
-                if (Timeplus_Arrow == 0.6f)
-                    x = Random.Range(Row[5][0], Row[5][1]); // 스테이지3단계면 5라인
-                else if (Timeplus_Arrow == 0.4f)
-                    x = Random.Range(Row[7][0], Row[7][1]); // 스테이지3단계면 7라인
-
+                //if (Timeplus_Arrow == 0.6f)
+                //    x = Random.Range(Row[5][0], Row[5][1]); // 스테이지3단계면 5라인
+                //else if (Timeplus_Arrow == 0.4f)
+                int x = Random.Range(Row[7][0], Row[7][1]); // 스테이지3단계면 7라인
                 int y = Random.Range(1, 8);
-                monster[i] = Instantiate(Monster_Prefabs, 
-                    spawnPoints[x % 7].position + Vector3.up * (y % 7)
-                    , Quaternion.identity); // 새로운 몬스터 생성 Quaternion.identity : 회전값 지정 - 불필요
+                //monster[i] = Instantiate(Monster_Prefabs, spawnPoints[x % 7].position + Vector3.up * (y % 7)
+                //    , Quaternion.identity, GameObject.Find("Canvas").transform.Find("GameObject").transform); // 새로운 몬스터 생성 Quaternion.identity : 회전값 지정 - 불필요
+                monster[i] = Instantiate(Monster_Prefabs, spawnPoints[x % 7].position + Vector3.up * (y % 7)
+                    , Quaternion.identity); //, GameObject.Find("Canvas").transform); // 새로운 몬스터 생성 Quaternion.identity : 회전값 지정 - 불필요
                 return;
             }
         }
     }
 }
-
-
-// 활쏠 때 스프라이트 변경하는 코드 - 비활성 - 적용 안됌
-//public void SpriteChange()
-//{
-//    SpriteChange2();
-//    Invoke("SpriteChange1", 0.1f);
-//    Invoke("SpriteChang01", 0.2f);
-//}
-//public void SpriteChange2() { spriteRenderer.sprite = sprites[2]; }
-//public void SpriteChange1() { spriteRenderer.sprite = sprites[1]; }
-//public void SpriteChange0() { spriteRenderer.sprite = sprites[0]; }
