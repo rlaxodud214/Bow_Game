@@ -17,10 +17,10 @@ public class GameManager : MonoBehaviour
     public GameObject[] Life = new GameObject[4];     // 남은 목숨을 저장할 배열
     public int life;                                  // 남은 목숨, 하트 갯수
     public int count = 0;
+    public Text RESULT_time;
     public Text RESULT_score;
     public Text RESULT_stage;
-    public Text PAUSE_score;
-    public Text PAUSE_stage;
+    public Text GAME_score;
     public Text STAGE_stage;
     public Text Count;
     public bool ispause;
@@ -36,21 +36,30 @@ public class GameManager : MonoBehaviour
     public GameObject Arrow_Prefabs;  // 화살 복제시 사용할 프리팹
     public GameObject Arrow; // 화살 // bulletPos값을 저장하기 위해 초기 화살 오브젝트 변수 생성
     public Vector3 ArrowPos; // 화살 초기 위치(화살 생성 좌표값)
-
+    
     public float nextTime_Monster = 0.0f;
     public float Timeplus_Monster = 2.0f; // 몬스터 생성 주기 현재 : 1.5초
+
     // 몬스터 오브젝트
     public GameObject Monster_Prefabs;  // 몬스터 복제시 사용할 프리팹
     public List<GameObject> monster = new List<GameObject>();
     public Transform[] spawnPoints; // 몬스터 생성시 위치 배열
     public int monster_count = 0;
 
-    // 스테이지 클리어 조건 몬스터 수 배열
-    public int[] stage_up = new int[5] { 40, 90, 150, 210, 280 }; // 실제
-    // public int[] stage_up = new int[5] { 4, 9, 15, 21, 28 }; // 테스트용
-    public float[] Monster_Speed_Real = new float[5] { 2.0f, 1.9f, 1.8f, 1.65f, 1.5f }; // 실제
-    public float[] Monster_Speed_Test = new float[5] { 2.0f, 1.9f, 1.8f, 1.65f, 1.5f }; // 테스트
+    // 오브젝트 이동속도
+    public float MonsterSpeed; // 몬스터 이동속도
+    public int ArrowSpeed = 5; // 화살 이동속도
+
+    // 스테이지별로 변하는 값들 배열로 선언
+    public int[] stage_up_Real = new int[5] { 40, 90, 150, 210, 280 }; // 실제
+    public int[] stage_up = new int[5] { 4, 9, 15, 21, 28 }; // 테스트용
+
+    public float[] Monster_Speed_Real = new float[5] { 0.02f, 0.025f, 0.03f, 0.035f, 0.04f }; // 실제
+    public float[] Monster_Speed_Test = new float[5] { 0.03f, 0.04f, 0.05f, 0.06f, 0.07f }; // 테스트용
     public float[] Monster_Spawn = new float[5] { 2.0f, 1.9f, 1.8f, 1.65f, 1.5f }; // 실제
+
+    public int[] Arrow_Speed_Real = new int[5] { 5, 6, 7, 8, 9 }; // 실제
+    public int[] Arrow_Speed_Test = new int[5] { 6, 7, 8, 9, 10 }; // 테스트용
     public float[] Arrow_Spawn = new float[5] { 1.0f, 0.95f, 0.9f, 0.85f, 0.8f }; // 실제
     
     List<List<int>> Row = 
@@ -78,18 +87,23 @@ public class GameManager : MonoBehaviour
 
     void Awake()                                      // 제일 처음 호출되는 함수
     {
+        MonsterSpeed = Monster_Speed_Test[0]; // 몬스터 이동속도 초기화
+        ArrowSpeed = Arrow_Speed_Test[0];
         _Instance = GetComponent<GameManager>();      // _gManager라는 변수에 자신의 GameManager 컴포넌트를 참조하는 값을 저장, Game속성에 set코드를 짜면 다르게 대입가능
         ArrowPos = Arrow.gameObject.transform.position; // 화살의 현재 위치를 받아온다.
         for(int i = 0; i < 10; i++) {
             monster.Add(null);
         }
         RESULT_stage.text = "1";
-        PAUSE_stage.text = "1";
         STAGE_stage.text = "1";
         //stage&life 변수 초기화
         life = 3;
         // spriteRenderer = GetComponent<SpriteRenderer>();
         ispause = true;
+        for( int i = 0; i < Monster_Speed_Test.Length; i++)
+        {
+            Debug.Log("i : " + i + "Monster_Speed_Test[i] : " + Monster_Speed_Test[i]);
+        }
     }
     #endregion
 
@@ -113,22 +127,27 @@ public class GameManager : MonoBehaviour
             if (count >= stage_up[i] && !UIManager.Instance.pause)
             {
                 RESULT_stage.text = (i + 2).ToString();
-                PAUSE_stage.text = (i + 2).ToString();
                 STAGE_stage.text = "스테이지 : " + (i + 2).ToString();
             }
 
             if (count == stage_up[i] && ispause)
             {
                 UIManager.Instance.StagePanel_on();
+                Debug.Log("스테이지 상승");
+                MonsterSpeed = Monster_Speed_Test[i];
+                ArrowSpeed = Arrow_Speed_Test[i];
                 ispause = false;
             }
 
             if (count == stage_up[i] + 1 || count == stage_up[i] + 2 || count == stage_up[i] + 3)
                 ispause = true;
         }
-        RESULT_score.text = (count * 10).ToString();
-        PAUSE_score.text = (count * 10).ToString();
+        GAME_score.text = "점수 : " + (count * 10).ToString();
+        RESULT_score.text = "점수 : " + (count * 10).ToString();
+        RESULT_time.text = "게임시간 : " + time.ToString("N1") + "초";
         Count.text = "잡은 몬스터 수 : " + count.ToString();
+        Debug.Log("MonsterSpeed : " + MonsterSpeed);
+        Debug.Log("ArrowSpeed : " + ArrowSpeed);
     }
 
     public void countPlus() { count++; } // 몬스터 처치 횟수 증가

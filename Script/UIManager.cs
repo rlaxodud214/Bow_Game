@@ -62,12 +62,13 @@ public class UIManager : MonoBehaviour
     public void GameOver() //게임오버+결과화면 함수
     {
         Time.timeScale = 0f;
-        var count = GameManager.Instance.count;
+        // 캔버스의 서브카메라가 결과 패널을 가려서 false 시킴
+        GameObject.Find("SubCamera").gameObject.SetActive(false); 
         SoundManager.Instance.Gameover();
         ResultPanel.SetActive(true);
     }
 
-    public void Pause() // 일시정지 버튼을 눌렀을때
+    public void Menu() // 일시정지 버튼을 눌렀을때
     {
         SoundManager.Instance.Btn_Click();
         Time.timeScale = 0f;

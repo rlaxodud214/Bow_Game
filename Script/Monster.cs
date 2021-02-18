@@ -9,7 +9,6 @@ public class Monster : MonoBehaviour
     public int life = 3;
     public int count = 0;
     public int maxMonsterCount = 10;
-    public float MonsterSpeed = 0.003f; // 몬스터 이동 속도
     public bool is_tutorial = false;
     
     // dynamic m, s, l, c;
@@ -30,12 +29,15 @@ public class Monster : MonoBehaviour
     // 1 : 몬스터 2초마다 스폰, 2 : 몬스터 1.5초마다 스폰, 3 : 몬스터 1초마다 스폰, 4 : 몬스터 0.7초마다 스폰
     void Update()
     {
+        Vector3 curPos = transform.position;
+        Vector3 nextPos = Vector3.down * GameManager.Instance.MonsterSpeed;
         if (!is_tutorial && !UIManager.Instance.pause)
-        { 
-            Vector3 curPos = transform.position;
-            Vector3 nextPos = Vector3.down * MonsterSpeed;
+        {
+            
             transform.position = curPos + nextPos;
         }
+        // Debug.Log("GameManager.Instance.MonsterSpeed : " + GameManager.Instance.MonsterSpeed);
+        Debug.Log("nextPos : " + nextPos);
     }
 
     void OnTriggerEnter2D(Collider2D collision) // 제거

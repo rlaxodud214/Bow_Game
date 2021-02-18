@@ -5,9 +5,7 @@ using UnityEngine;
 public class bullet : MonoBehaviour
 {
     #region Singleton  
-
-    public float speed = 5f;  // 화살이 날아갈 속도->??
-    public GameObject Bullet; // 화살
+    public GameObject Bullet; // 화살 - 초기 위치값 가져오기위해 선언
 
     // 슬라이더 값에 따라 회전하게 하기
     float time = 0f;
@@ -27,11 +25,6 @@ public class bullet : MonoBehaviour
     }
     #endregion 
 
-    void Start()
-    {
-        
-    }
-
     // Update is called once per frame
     void Update()
     {
@@ -42,9 +35,10 @@ public class bullet : MonoBehaviour
         if (time < 0.2f)
             //transform.localEulerAngles = new Vector3(0, 0, Rotation_angle);
             transform.rotation = Quaternion.Euler(0, 0, Rotation_angle);
-        transform.Translate(Vector3.left * -1f * speed * Time.deltaTime, Space.Self);  //(0,1,0)
+        transform.Translate(Vector3.left * -1f * Time.deltaTime * GameManager.Instance.ArrowSpeed, Space.Self);  //(0,1,0)
         // Debug.Log("회전값 : " + Rotation_angle);
         // Debug.Log("회전값 : " + transform.localEulerAngles);
+        // Debug.Log("GameManager.Instance.ArrowSpeed : " + GameManager.Instance.ArrowSpeed);
     }
 
     void OnTriggerEnter2D(Collider2D collision) // 화살 제거
