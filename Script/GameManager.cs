@@ -91,25 +91,24 @@ public class GameManager : MonoBehaviour
         ArrowPos = Arrow.gameObject.transform.position; // 화살의 현재 위치를 받아온다.
 
         Monster_Speed_Real = new float[5] { 0.02f, 0.025f, 0.03f, 0.035f, 0.04f }; // 실제
-        Monster_Speed_Test = new float[5] { 0.02f, 0.03f, 0.04f, 0.05f, 0.06f }; // 테스트용
+        Monster_Speed_Test = new float[5] { 0.2f, 0.5f, 0.8f, 1.1f, 2f }; // 테스트용
         Monster_Spawn = new float[5] { 2.0f, 1.9f, 1.8f, 1.65f, 1.5f }; // 실제
-        MonsterSpeed = 0.1f; // 몬스터 이동속도 초기화
+        MonsterSpeed = 0.01f; // 몬스터 이동속도 초기화
         
         Arrow_Speed_Real = new int[5] { 6, 7, 8, 9, 10 }; // 실제
         Arrow_Speed_Test = new int[5] { 7, 8, 9, 10, 11 }; // 테스트용
         Arrow_Spawn = new float[5] { 1.0f, 0.95f, 0.9f, 0.85f, 0.8f }; // 실제
         ArrowSpeed = 6;
 
-        
-        for(int i = 0; i < 10; i++) {
+        pass = true;
+
+        for (int i = 0; i < 10; i++) {
             monster.Add(null);
         }
         RESULT_stage.text = "1";
         STAGE_stage.text = "1";
         //stage&life 변수 초기화
         life = 3;
-        // spriteRenderer = GetComponent<SpriteRenderer>();
-        pass = true;
         for( int i = 0; i < Monster_Speed_Test.Length; i++)
         {
             Debug.Log("i : " + i + "Monster_Speed_Test[i] : " + Monster_Speed_Test[i]);
@@ -132,23 +131,25 @@ public class GameManager : MonoBehaviour
     }
     public void Stage_Check()
     {
-        for (int i = stage_up.Length-1; i > 0; i--)
+        for (int i = stage_up.Length-1; i >= 0; i--)
         {
+            // Debug.Log("i : " + i);
             if (count >= stage_up[i])
             {
                 RESULT_stage.text = (i + 2).ToString();
                 STAGE_stage.text = "스테이지 : " + (i + 2).ToString();
-                break;
             }
 
             if (count == stage_up[i] && pass)
             {
-                Debug.LogError("스테이지 상승");
+                // Debug.LogError((i + 2) + "스테이지 진입");
 
                 UIManager.Instance.StagePanel_on();
                 pass = false;
-                MonsterSpeed = Monster_Speed_Test[i];
+                // MonsterSpeed = Monster_Speed_Test[i];
+                MonsterSpeed = Monster_Speed_Real[i];
                 ArrowSpeed = Arrow_Speed_Test[i];
+                break;
             }
             if (count == stage_up[i] + 1) pass = true;
         }
@@ -213,8 +214,8 @@ public class GameManager : MonoBehaviour
         {
             if (monster[i] == null)
             {
-                int x = Random.Range(Row[3][0], Row[3][1]); // 디폴트는 3라인 - 테스트용
-
+                // int x = Random.Range(Row[3][0], Row[3][1]); // 디폴트는 3라인 - 테스트
+                int x = 3;
                 //if (Timeplus_Arrow == 0.6f)
                 //    x = Random.Range(Row[5][0], Row[5][1]); // 스테이지3단계면 5라인
                 //else if (Timeplus_Arrow == 0.4f)

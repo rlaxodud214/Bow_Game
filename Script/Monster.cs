@@ -7,11 +7,9 @@ public class Monster : MonoBehaviour
     #region Singleton                                         // 싱글톤 패턴은 하나의 인스턴스에 전역적인 접근을 시키며 보통 호출될 때 인스턴스화 되므로 사용하지 않는다면 생성되지도 않습니다.
 
     public int life = 3;
-    public int count = 0;
     public int maxMonsterCount = 10;
     public bool is_tutorial = false;
-    
-    // dynamic m, s, l, c;
+    public Vector3 curPos, nextPos;
 
     private static Monster _Instance;          // 싱글톤 패턴을 사용하기 위한 인스턴스 변수, static 선언으로 어디서든 참조가 가능함
     public static Monster Instance                    // 객체에 접근하기 위한 속성으로 내부에 get set을 사용한다.
@@ -29,14 +27,12 @@ public class Monster : MonoBehaviour
     // 1 : 몬스터 2초마다 스폰, 2 : 몬스터 1.5초마다 스폰, 3 : 몬스터 1초마다 스폰, 4 : 몬스터 0.7초마다 스폰
     void Update()
     {
-        Vector3 curPos = transform.position;
-        Vector3 nextPos = Vector3.down * GameManager.Instance.MonsterSpeed;
+        curPos = transform.position;
+        nextPos = Vector3.down * GameManager.Instance.MonsterSpeed;
         if (!is_tutorial && !UIManager.Instance.pause)
         {
             transform.position = curPos + nextPos;
         }
-        // Debug.Log("GameManager.Instance.MonsterSpeed : " + GameManager.Instance.MonsterSpeed);
-        // Debug.Log("nextPos : " + nextPos);
     }
 
     void OnTriggerEnter2D(Collider2D collision) // 제거

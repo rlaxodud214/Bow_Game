@@ -13,6 +13,12 @@ public class SoundManager : MonoBehaviour
     public AudioClip Button;          // 버튼클릭 효과음
 
     // 메뉴패널 슬라이더 조절
+    public Button btn1;
+    public Button btn2;
+    public Sprite btn1_Sprite_on;
+    public Sprite btn1_Sprite_off;
+    public Sprite btn2_Sprite_on;
+    public Sprite btn2_Sprite_off;
     public Slider backVSlider1;
     public Slider backVSlider2;
     public float backvol1 = 0.5f;
@@ -61,6 +67,10 @@ public class SoundManager : MonoBehaviour
         myAudio1.volume = backVSlider1.value;
         backvol1 = backVSlider1.value;
         PlayerPrefs.SetFloat("backvol", backvol1);
+        if (backVSlider1.value != 0)
+            btn1.GetComponent<Image>().sprite = btn1_Sprite_on;
+        else
+            btn1.GetComponent<Image>().sprite = btn1_Sprite_off;
     }
     public void soundslider2()
     {
@@ -70,36 +80,52 @@ public class SoundManager : MonoBehaviour
         
         backvol2 = backVSlider2.value;
         PlayerPrefs.SetFloat("backvol", backvol2);
+        if (backVSlider2.value != 0)
+            btn2.GetComponent<Image>().sprite = btn2_Sprite_on;
+        else
+            btn2.GetComponent<Image>().sprite = btn2_Sprite_off;
     }
     public void no_backsound1()
     {
-        if(myAudio1.volume == 0)
+        if(backVSlider1.value == 0)
         {
-            myAudio1.volume = 0.3f;
-            backVSlider1.value = 0.3f;
+            myAudio1.volume = 0.4f;
+            backVSlider1.value = 0.4f;
+            btn1.GetComponent<Image>().sprite = btn1_Sprite_on;
         }
         else
         {
             myAudio1.volume = 0f;
             backVSlider1.value = 0f;
+            btn1.GetComponent<Image>().sprite = btn1_Sprite_off;
         }
     }
 
     public void no_backsound2()
     {
-        for (int i = 0; i < myAudio2.Length; i++)
+        if (backVSlider2.value == 0)
         {
-            if (myAudio2[i].volume == 0)
+            for (int i = 0; i < myAudio2.Length; i++)
             {
-                myAudio2[i].volume = 0.3f;
-                backVSlider1.value = 0.3f;
+                myAudio2[i].volume = 0.4f;
+                backVSlider2.value = 0.4f;
             }
-            else
+            btn2.GetComponent<Image>().sprite = btn2_Sprite_on;
+        }
+        else
+        {
+            for (int i = 0; i < myAudio2.Length; i++)
             {
                 myAudio2[i].volume = 0f;
                 backVSlider2.value = 0f;
             }
+            btn2.GetComponent<Image>().sprite = btn2_Sprite_off;
         }
+                
+    }
+    public void Btn_Click_Main() // 클릭 버튼음
+    {
+        myAudio1.PlayOneShot(Button); // 오디오 소스로 소리를 한 번 재생시킴
     }
 
     public void Btn_Click() // 클릭 버튼음
