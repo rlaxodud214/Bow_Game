@@ -1,14 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SoundManager : MonoBehaviour
 {
-    public AudioSource myAudio;
+    public AudioSource myAudio1;
+    public AudioSource[] myAudio2 = new AudioSource[4];
     public AudioClip monster_die;     // 몬스터 사망
     public AudioClip GameOver;        // 말그대로 ㅇㅇ
     public AudioClip Stage_up;        // 스테이지 상승
     public AudioClip Button;          // 버튼클릭 효과음
+
+    // 메뉴패널 슬라이더 조절
+    public Slider backVSlider1;
+    public Slider backVSlider2;
+    public float backvol1 = 0.5f;
+    public float backvol2 = 0.5f;
 
     // public AudioClip player_damage;      // life 감소시
 
@@ -31,24 +39,84 @@ public class SoundManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        myAudio = GetComponent<AudioSource>();  // 오디오 소스(SoundManager 오브젝트)를 가져와 myAudio에 저장
-        // DontDestroyOnLoad(gameObject);  // 씬 넘어가도 SoundManager 오브젝트 살리기 (Main씬을 넘어가도 SoundManager 오브젝트는 살아있음)
+        myAudio1 = GetComponents<AudioSource>()[0];  // 오디오 소스(SoundManager 오브젝트)를 가져와 myAudio에 저장
+
+        backvol1 = PlayerPrefs.GetFloat("backvol1", 0.5f);
+        backVSlider1.value = backvol1;
+        myAudio1.volume = backVSlider1.value;
+
+        backvol2 = PlayerPrefs.GetFloat("backvol2", 0.5f);
+        backVSlider2.value = backvol2;
+
+        for (int i = 0; i < myAudio2.Length; i++) { myAudio2[i].volume = backVSlider2.value; }
     }
+    private void Update()
+    {
+        soundslider1();
+        soundslider2();
+    }
+
+    public void soundslider1()
+    {
+        myAudio1.volume = backVSlider1.value;
+        backvol1 = backVSlider1.value;
+        PlayerPrefs.SetFloat("backvol", backvol1);
+    }
+    public void soundslider2()
+    {
+        for (int i = 0; i < myAudio2.Length; i++) {
+            myAudio2[i].volume = backVSlider2.value;
+        }
+        
+        backvol2 = backVSlider2.value;
+        PlayerPrefs.SetFloat("backvol", backvol2);
+    }
+    public void no_backsound1()
+    {
+        if(myAudio1.volume == 0)
+        {
+            myAudio1.volume = 0.3f;
+            backVSlider1.value = 0.3f;
+        }
+        else
+        {
+            myAudio1.volume = 0f;
+            backVSlider1.value = 0f;
+        }
+    }
+
+    public void no_backsound2()
+    {
+        for (int i = 0; i < myAudio2.Length; i++)
+        {
+            if (myAudio2[i].volume == 0)
+            {
+                myAudio2[i].volume = 0.3f;
+                backVSlider1.value = 0.3f;
+            }
+            else
+            {
+                myAudio2[i].volume = 0f;
+                backVSlider2.value = 0f;
+            }
+        }
+    }
+
     public void Btn_Click() // 클릭 버튼음
     {
-        myAudio.PlayOneShot(Button); // 오디오 소스로 소리를 한 번 재생시킴
+        myAudio2[1].PlayOneShot(Button); // 오디오 소스로 소리를 한 번 재생시킴
     }
     public void Monster_die() // 몬스터 사망음
     {
-        myAudio.PlayOneShot(monster_die); // 오디오 소스로 소리를 한 번 재생시킴
+        myAudio2[2].PlayOneShot(monster_die); // 오디오 소스로 소리를 한 번 재생시킴
     }
     public void stageUp() // 몬스터 사망음
     {
-        myAudio.PlayOneShot(Stage_up); // 오디오 소스로 소리를 한 번 재생시킴
+        myAudio2[3].PlayOneShot(Stage_up); // 오디오 소스로 소리를 한 번 재생시킴
     }
     public void Gameover() // 몬스터 사망음
     {
-        myAudio.PlayOneShot(GameOver); // 오디오 소스로 소리를 한 번 재생시킴
+        myAudio2[4].PlayOneShot(GameOver); // 오디오 소스로 소리를 한 번 재생시킴
     }
     public void Player_damage() // life 감소음
     {

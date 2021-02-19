@@ -33,11 +33,10 @@ public class Monster : MonoBehaviour
         Vector3 nextPos = Vector3.down * GameManager.Instance.MonsterSpeed;
         if (!is_tutorial && !UIManager.Instance.pause)
         {
-            
             transform.position = curPos + nextPos;
         }
         // Debug.Log("GameManager.Instance.MonsterSpeed : " + GameManager.Instance.MonsterSpeed);
-        Debug.Log("nextPos : " + nextPos);
+        // Debug.Log("nextPos : " + nextPos);
     }
 
     void OnTriggerEnter2D(Collider2D collision) // 제거
