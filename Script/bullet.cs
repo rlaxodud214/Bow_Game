@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class bullet : MonoBehaviour
 {
@@ -8,10 +9,12 @@ public class bullet : MonoBehaviour
     public GameObject Bullet; // 화살 - 초기 위치값 가져오기위해 선언
 
     // 슬라이더 값에 따라 회전하게 하기
-    float time = 0f;
-    float slider_value;   // 처리전 슬라이더 값
-    float Rotation_angle; // 처리후 회전각
-       
+    public float time = 0f;
+    public float slider_value;   // 처리전 슬라이더 값
+    public float Rotation_angle; // 처리후 회전각
+
+    // 슬라이더 관련
+    public GameObject slider; // 20 ~ 160 정수값 slider.value
 
     private static bullet _Instance;          // 싱글톤 패턴을 사용하기 위한 인스턴스 변수, static 선언으로 어디서든 참조가 가능함
     public static bullet Instance                    // 객체에 접근하기 위한 속성으로 내부에 get set을 사용한다.
@@ -21,6 +24,8 @@ public class bullet : MonoBehaviour
 
     void Awake()                                               // Start()보다 먼저 실행
     {
+        slider = GameObject.Find("Slider");
+        slider_value = slider.GetComponent<Slider>().value;
         _Instance = GetComponent<bullet>();    // _sceneManager변수에 자신의 SceneChangeManager 컴포넌트를 넣는다.
     }
     #endregion 
@@ -29,16 +34,11 @@ public class bullet : MonoBehaviour
     void Update()
     {
         time += Time.deltaTime;
-        slider_value = GameManager.Instance.slider.value; // 처리전 슬라이더 값
-        Rotation_angle = 180 - slider_value; //40 ~ 140 -> 20 ~ 160 0 - 140 x - ? = 90
-        // transform.localEulerAngles = new Vector3(0, 0, Rotation_angle);
+        slider_value = slider.GetComponent<Slider>().value;
+        Rotation_angle = 180 - slider_value; //20 ~ 160 중간값 90
         if (time < 0.2f)
-            //transform.localEulerAngles = new Vector3(0, 0, Rotation_angle);
             transform.rotation = Quaternion.Euler(0, 0, Rotation_angle);
         transform.Translate(Vector3.left * -1f * Time.deltaTime * GameManager.Instance.ArrowSpeed, Space.Self);  //(0,1,0)
-        // Debug.Log("회전값 : " + Rotation_angle);
-        // Debug.Log("회전값 : " + transform.localEulerAngles);
-        // Debug.Log("GameManager.Instance.ArrowSpeed : " + GameManager.Instance.ArrowSpeed);
     }
 
     void OnTriggerEnter2D(Collider2D collision) // 화살 제거

@@ -36,7 +36,8 @@ public class GameManager : MonoBehaviour
     public GameObject Arrow_Prefabs;  // 화살 복제시 사용할 프리팹
     public GameObject Arrow; // 화살 // bulletPos값을 저장하기 위해 초기 화살 오브젝트 변수 생성
     public Vector3 ArrowPos; // 화살 초기 위치(화살 생성 좌표값)
-    
+    public GameObject info;   // 화살 발사위치
+
     public float nextTime_Monster = 0.0f;
     public float Timeplus_Monster = 2.0f; // 몬스터 생성 주기 현재 : 1.5초
 
@@ -72,7 +73,7 @@ public class GameManager : MonoBehaviour
     // 2. 스트립트에서 슬라이더에 접근해서 처리하는 방식 -> 사용
 
     // 슬라이더 관련
-    public Slider slider; // 0 ~ 100 정수값 slider.value
+    public Slider slider; // 20 ~ 160 정수값 slider.value
 
     #endregion
 
@@ -101,7 +102,7 @@ public class GameManager : MonoBehaviour
         ArrowSpeed = 6;
 
         pass = true;
-
+        slider.value = 90;
         for (int i = 0; i < 10; i++) {
             monster.Add(null);
         }
@@ -109,10 +110,6 @@ public class GameManager : MonoBehaviour
         STAGE_stage.text = "1";
         //stage&life 변수 초기화
         life = 3;
-        for( int i = 0; i < Monster_Speed_Test.Length; i++)
-        {
-            Debug.Log("i : " + i + "Monster_Speed_Test[i] : " + Monster_Speed_Test[i]);
-        }
     }
     #endregion
 
@@ -128,6 +125,20 @@ public class GameManager : MonoBehaviour
         time += Time.deltaTime;
         Create_Object();
         Stage_Check();
+        ChangeColorAndRotation();
+    }
+    public void ChangeColorAndRotation()
+    {
+        Quaternion Direction = Quaternion.Euler(0, 0, (262 - bullet.Instance.slider_value)*1.2f);
+        info.transform.rotation = Direction;
+        Debug.Log("bullet.Instance.slider_value/10 : " + bullet.Instance.slider_value / 10);
+        // 색상변경 영점 맞추기
+        if (bullet.Instance.slider_value == 90)
+            GameObject.Find("orignOne").GetComponent<Image>().color = new Color(255 / 255, 0 / 255, 48 / 255);
+        else if ((int)bullet.Instance.slider_value/10 == 8 || (int)bullet.Instance.slider_value / 10 == 9)
+            GameObject.Find("orignOne").GetComponent<Image>().color = new Color(255 / 255, 113 / 255, 0 / 255);
+        else
+            GameObject.Find("orignOne").GetComponent<Image>().color = new Color(0 / 255, 198 / 255, 255 / 255);
     }
     public void Stage_Check()
     {
@@ -157,8 +168,8 @@ public class GameManager : MonoBehaviour
         RESULT_score.text = "점수 : " + (count * 10).ToString();
         RESULT_time.text = "게임시간 : " + time.ToString("N1") + "초";
         Count.text = "잡은 몬스터 수 : " + count.ToString();
-        Debug.Log("MonsterSpeed : " + MonsterSpeed);
-        Debug.Log("ArrowSpeed : " + ArrowSpeed);
+        // Debug.Log("MonsterSpeed : " + MonsterSpeed);
+        // Debug.Log("ArrowSpeed : " + ArrowSpeed);
     }
     public void countPlus() { count++; } // 몬스터 처치 횟수 증가
 
