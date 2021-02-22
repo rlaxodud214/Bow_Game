@@ -161,12 +161,12 @@ PrefabInstance:
     - target: {fileID: 240626228728614339, guid: 5b7f7c2c709e14944911410b30ca2644,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.97236997
+      value: 0.9759168
       objectReference: {fileID: 0}
     - target: {fileID: 240626228728614339, guid: 5b7f7c2c709e14944911410b30ca2644,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.23344536
+      value: -0.21814322
       objectReference: {fileID: 0}
     - target: {fileID: 240626228728614339, guid: 5b7f7c2c709e14944911410b30ca2644,
         type: 3}
@@ -186,7 +186,7 @@ PrefabInstance:
     - target: {fileID: 240626228728614339, guid: 5b7f7c2c709e14944911410b30ca2644,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 207
+      value: 205.2
       objectReference: {fileID: 0}
     - target: {fileID: 240626228728614339, guid: 5b7f7c2c709e14944911410b30ca2644,
         type: 3}
@@ -256,7 +256,7 @@ PrefabInstance:
     - target: {fileID: 240626228728614348, guid: 5b7f7c2c709e14944911410b30ca2644,
         type: 3}
       propertyPath: m_FillAmount
-      value: 0.16
+      value: 0.15
       objectReference: {fileID: 0}
     - target: {fileID: 240626228728614348, guid: 5b7f7c2c709e14944911410b30ca2644,
         type: 3}
@@ -4304,7 +4304,6 @@ MonoBehaviour:
   GAME_score: {fileID: 6789910899120677498}
   STAGE_stage: {fileID: 875916696}
   Count: {fileID: 1511018481}
-  pass: 0
   time: 0
   nextTime_Arrow: 0
   Timeplus_Arrow: 0.8

@@ -23,7 +23,6 @@ public class GameManager : MonoBehaviour
     public Text GAME_score;
     public Text STAGE_stage;
     public Text Count;
-    public bool pass;
 
     // 활 스프라이트 변경
     // public Sprite[] sprites;
@@ -101,7 +100,6 @@ public class GameManager : MonoBehaviour
         Arrow_Spawn = new float[5] { 1.0f, 0.95f, 0.9f, 0.85f, 0.8f }; // 실제
         ArrowSpeed = 6;
 
-        pass = true;
         slider.value = 90;
         for (int i = 0; i < 10; i++) {
             monster.Add(null);
@@ -124,54 +122,64 @@ public class GameManager : MonoBehaviour
     {
         time += Time.deltaTime;
         Create_Object();
-        Stage_Check();
         ChangeColorAndRotation();
     }
     public void ChangeColorAndRotation()
     {
-        Quaternion Direction = Quaternion.Euler(0, 0, (262 - bullet.Instance.slider_value)*1.2f);
+        // Debug.Log("bullet.Instance.slider_value/10 : " + bullet.Instance.slider_value / 10);
+        Quaternion Direction = Quaternion.Euler(0, 0, (261 - bullet.Instance.slider_value)*1.2f);
         info.transform.rotation = Direction;
-        Debug.Log("bullet.Instance.slider_value/10 : " + bullet.Instance.slider_value / 10);
-        // 색상변경 영점 맞추기
-        if (bullet.Instance.slider_value == 90)
-            GameObject.Find("orignOne").GetComponent<Image>().color = new Color(255 / 255, 0 / 255, 48 / 255);
-        else if ((int)bullet.Instance.slider_value/10 == 8 || (int)bullet.Instance.slider_value / 10 == 9)
-            GameObject.Find("orignOne").GetComponent<Image>().color = new Color(255 / 255, 113 / 255, 0 / 255);
+
+        // 가운데 일때 색상변경 - 영점 맞추기
+        if (bullet.Instance.slider_value == 89 || bullet.Instance.slider_value == 90 || bullet.Instance.slider_value == 91)
+            GameObject.Find("orignOne").GetComponent<Image>().color = HexToColor("FF5E56");
+        //else if ((int)bullet.Instance.slider_value / 10 == 8 || (int)bullet.Instance.slider_value / 10 == 9 || (int)bullet.Instance.slider_value / 10 == 10)
+        //    GameObject.Find("orignOne").GetComponent<Image>().color = HexToColor("FDBF49");
+        else if (bullet.Instance.slider_value == 20 || bullet.Instance.slider_value == 160)
+            GameObject.Find("orignOne").GetComponent<Image>().color = HexToColor("FF5E56");
         else
-            GameObject.Find("orignOne").GetComponent<Image>().color = new Color(0 / 255, 198 / 255, 255 / 255);
+            GameObject.Find("orignOne").GetComponent<Image>().color = HexToColor("27F6F6");
     }
-    public void Stage_Check()
+
+    public static Color HexToColor(string hex)
     {
-        for (int i = stage_up.Length-1; i >= 0; i--)
-        {
-            // Debug.Log("i : " + i);
-            if (count >= stage_up[i])
-            {
-                RESULT_stage.text = (i + 2).ToString();
-                STAGE_stage.text = "스테이지 : " + (i + 2).ToString();
-            }
+        hex = hex.Replace("0x", "");
+        hex = hex.Replace("#", "");
+        byte r = byte.Parse(hex.Substring(0, 2), System.Globalization.NumberStyles.HexNumber);
+        byte g = byte.Parse(hex.Substring(2, 2), System.Globalization.NumberStyles.HexNumber);
+        byte b = byte.Parse(hex.Substring(4, 2), System.Globalization.NumberStyles.HexNumber);
+        byte a = 255;
+        if(hex.Length == 8)
+            a = byte.Parse(hex.Substring(6, 2), System.Globalization.NumberStyles.HexNumber);
+        return new Color32(r, g, b, a);
+    }
+    public void Stage_Check(int i)
+    {
+        RESULT_stage.text = (i + 2).ToString();
+        STAGE_stage.text = "스테이지 : " + (i + 2).ToString();
+        // Debug.LogError((i + 2) + "스테이지 진입");
+        Debug.Log((i + 2) + "스테이지 진입");
 
-            if (count == stage_up[i] && pass)
-            {
-                // Debug.LogError((i + 2) + "스테이지 진입");
-
-                UIManager.Instance.StagePanel_on();
-                pass = false;
-                // MonsterSpeed = Monster_Speed_Test[i];
-                MonsterSpeed = Monster_Speed_Real[i];
-                ArrowSpeed = Arrow_Speed_Test[i];
-                break;
-            }
-            if (count == stage_up[i] + 1) pass = true;
-        }
-        GAME_score.text = "점수 : " + (count * 10).ToString();
+        UIManager.Instance.StagePanel_on();
+        // MonsterSpeed = Monster_Speed_Test[i];
+        MonsterSpeed = Monster_Speed_Real[i];
+        ArrowSpeed = Arrow_Speed_Test[i];
+        
         RESULT_score.text = "점수 : " + (count * 10).ToString();
         RESULT_time.text = "게임시간 : " + time.ToString("N1") + "초";
         Count.text = "잡은 몬스터 수 : " + count.ToString();
-        // Debug.Log("MonsterSpeed : " + MonsterSpeed);
+        Debug.Log("MonsterSpeed : " + MonsterSpeed);
         // Debug.Log("ArrowSpeed : " + ArrowSpeed);
     }
-    public void countPlus() { count++; } // 몬스터 처치 횟수 증가
+    public void countPlus() { 
+        count++;
+        GAME_score.text = "점수 : " + (count * 10).ToString();
+        for (int i = stage_up.Length - 1; i >= 0; i--)
+        {
+            if (count == stage_up[i])
+                Stage_Check(i);
+        }
+    } // 몬스터 처치 횟수 증가
 
     void Create_Object() // 화살, 몬스터 생성코드
     {
@@ -226,11 +234,11 @@ public class GameManager : MonoBehaviour
             if (monster[i] == null)
             {
                 // int x = Random.Range(Row[3][0], Row[3][1]); // 디폴트는 3라인 - 테스트
-                int x = 3;
+                int x = 3; // - 정방향으로만 몬스터가 나오는 테스트용
                 //if (Timeplus_Arrow == 0.6f)
                 //    x = Random.Range(Row[5][0], Row[5][1]); // 스테이지3단계면 5라인
                 //else if (Timeplus_Arrow == 0.4f)
-                // int x = Random.Range(Row[7][0], Row[7][1]); // 스테이지3단계면 7라인
+                //int x = Random.Range(Row[7][0], Row[7][1]);   // 실제 쓰는 값
                 int y = Random.Range(1, 8);
                 //monster[i] = Instantiate(Monster_Prefabs, spawnPoints[x % 7].position + Vector3.up * (y % 7)
                 //    , Quaternion.identity, GameObject.Find("Canvas").transform.Find("GameObject").transform); // 새로운 몬스터 생성 Quaternion.identity : 회전값 지정 - 불필요

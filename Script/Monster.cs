@@ -28,12 +28,23 @@ public class Monster : MonoBehaviour
     void Update()
     {
         curPos = transform.position;
-        nextPos = Vector3.down * GameManager.Instance.MonsterSpeed;
+        nextPos = Vector3.down * GameManager.Instance.MonsterSpeed * (Time.deltaTime * 50);
         if (!is_tutorial && !UIManager.Instance.pause)
         {
             transform.position = curPos + nextPos;
         }
     }
+
+    //void FixedUpdate()
+    //{
+    //    Debug.Log("FixedUpdate() 호출완료");
+    //    curPos = transform.position;
+    //    nextPos = Vector3.down * GameManager.Instance.MonsterSpeed;
+    //    if (!is_tutorial && !UIManager.Instance.pause)
+    //    {
+    //        transform.position = curPos + nextPos;
+    //    }
+    //}
 
     void OnTriggerEnter2D(Collider2D collision) // 제거
     {
