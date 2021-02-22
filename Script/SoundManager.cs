@@ -6,11 +6,12 @@ using UnityEngine.UI;
 public class SoundManager : MonoBehaviour
 {
     public AudioSource myAudio1;
-    public AudioSource[] myAudio2 = new AudioSource[4];
+    public AudioSource myAudio2;
     public AudioClip monster_die;     // 몬스터 사망
     public AudioClip GameOver;        // 말그대로 ㅇㅇ
     public AudioClip Stage_up;        // 스테이지 상승
     public AudioClip Button;          // 버튼클릭 효과음
+    public AudioClip arrow;           // 화살 발사음
 
     // 메뉴패널 슬라이더 조절
     public Button btn1;
@@ -34,6 +35,7 @@ public class SoundManager : MonoBehaviour
     // 인스턴스 변수 초기화
     void Awake()
     {
+        // myAudio2 = new AudioSource[5];
         // 인스턴스가 생성되지 않았을 때 (인스턴스 중복 생성을 막기 위함)
         if (SoundManager.Instance == null)
         {
@@ -54,7 +56,7 @@ public class SoundManager : MonoBehaviour
         backvol2 = PlayerPrefs.GetFloat("backvol2", 0.5f);
         backVSlider2.value = backvol2;
 
-        for (int i = 0; i < myAudio2.Length; i++) { myAudio2[i].volume = backVSlider2.value; }
+        // for (int i = 0; i < myAudio2.Length; i++) { myAudio2[i].volume = backVSlider2.value; }
     }
     private void Update()
     {
@@ -74,10 +76,7 @@ public class SoundManager : MonoBehaviour
     }
     public void soundslider2()
     {
-        for (int i = 0; i < myAudio2.Length; i++) {
-            myAudio2[i].volume = backVSlider2.value;
-        }
-        
+        myAudio2.volume = backVSlider2.value;
         backvol2 = backVSlider2.value;
         PlayerPrefs.SetFloat("backvol", backvol2);
         if (backVSlider2.value != 0)
@@ -105,20 +104,14 @@ public class SoundManager : MonoBehaviour
     {
         if (backVSlider2.value == 0)
         {
-            for (int i = 0; i < myAudio2.Length; i++)
-            {
-                myAudio2[i].volume = 0.4f;
-                backVSlider2.value = 0.4f;
-            }
+            myAudio2.volume = 0.4f;
+            backVSlider2.value = 0.4f;
             btn2.GetComponent<Image>().sprite = btn2_Sprite_on;
         }
         else
         {
-            for (int i = 0; i < myAudio2.Length; i++)
-            {
-                myAudio2[i].volume = 0f;
-                backVSlider2.value = 0f;
-            }
+            myAudio2.volume = 0f;
+            backVSlider2.value = 0f;
             btn2.GetComponent<Image>().sprite = btn2_Sprite_off;
         }
                 
@@ -130,22 +123,27 @@ public class SoundManager : MonoBehaviour
 
     public void Btn_Click() // 클릭 버튼음
     {
-        myAudio2[1].PlayOneShot(Button); // 오디오 소스로 소리를 한 번 재생시킴
+        myAudio2.PlayOneShot(Button); // 오디오 소스로 소리를 한 번 재생시킴
     }
     public void Monster_die() // 몬스터 사망음
     {
-        myAudio2[2].PlayOneShot(monster_die); // 오디오 소스로 소리를 한 번 재생시킴
+        myAudio2.PlayOneShot(monster_die); // 오디오 소스로 소리를 한 번 재생시킴
     }
     public void stageUp() // 몬스터 사망음
     {
-        myAudio2[3].PlayOneShot(Stage_up); // 오디오 소스로 소리를 한 번 재생시킴
+        myAudio2.PlayOneShot(Stage_up); // 오디오 소스로 소리를 한 번 재생시킴
     }
     public void Gameover() // 몬스터 사망음
     {
-        myAudio2[4].PlayOneShot(GameOver); // 오디오 소스로 소리를 한 번 재생시킴
+        myAudio2.PlayOneShot(GameOver); // 오디오 소스로 소리를 한 번 재생시킴
+    }
+    public void Arrow()
+    {
+        myAudio2.PlayOneShot(arrow); // 오디오 소스로 소리를 한 번 재생시킴
     }
     public void Player_damage() // life 감소음
     {
         // myAudio.PlayOneShot(player_damage); // 오디오 소스로 소리를 한 번 재생시킴
     }
+    
 }

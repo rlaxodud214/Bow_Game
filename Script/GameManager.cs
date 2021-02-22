@@ -208,6 +208,7 @@ public class GameManager : MonoBehaviour
         // var t = Instantiate(Arrow_Prefabs, ArrowPos, Quaternion.identity, GameObject.Find("Canvas").transform.Find("GameObject").transform); // 새로운 화살 생성 Quaternion.identity : 회전값 지정 - 불필요   
         var t = Instantiate(Arrow_Prefabs, ArrowPos, Quaternion.identity); //, GameObject.Find("Canvas").transform); // 새로운 화살 생성 Quaternion.identity : 회전값 지정 - 불필요   
         t.transform.Rotate(new Vector3(0, 0, 90f));
+        SoundManager.Instance.Arrow();
     }
 
     public void Create_Monster()
