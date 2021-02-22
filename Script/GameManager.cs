@@ -90,7 +90,7 @@ public class GameManager : MonoBehaviour
         _Instance = GetComponent<GameManager>();      // _gManager라는 변수에 자신의 GameManager 컴포넌트를 참조하는 값을 저장, Game속성에 set코드를 짜면 다르게 대입가능
         ArrowPos = Arrow.gameObject.transform.position; // 화살의 현재 위치를 받아온다.
 
-        Monster_Speed_Real = new float[5] { 0.02f, 0.025f, 0.03f, 0.035f, 0.04f }; // 실제
+        Monster_Speed_Real = new float[5] { 0.025f, 0.03f, 0.035f, 0.04f, 0.045f }; // 실제
         Monster_Speed_Test = new float[5] { 0.2f, 0.5f, 0.8f, 1.1f, 2f };  // 테스트용
         Monster_Spawn = new float[5] { 2.0f, 1.9f, 1.8f, 1.65f, 1.5f }; // 실제
 
@@ -100,7 +100,7 @@ public class GameManager : MonoBehaviour
 
         Arrow_Speed_Real = new int[5] { 7, 7, 8, 8, 9 }; // 실제
         Arrow_Speed_Test = new int[5] { 7, 7, 8, 8, 9 }; // 테스트용
-        Arrow_Spawn = new float[5] { 1.0f, 0.95f, 0.9f, 0.85f, 0.8f }; // 실제
+        Arrow_Spawn = new float[5] { 1.0f, 1.0f, 0.9f, 0.9f, 0.8f }; // 실제
         ArrowSpeed = 6;
 
         slider.value = 90;
@@ -229,7 +229,7 @@ public class GameManager : MonoBehaviour
         }
         if (count > stage_up[4]) {
             Timeplus_Monster = 0.7f - count*0.001f;
-            Timeplus_Arrow = 0.4f;
+            Timeplus_Arrow = 0.7f;
         }
 
         // monster_count = GameObject.FindGameObjectsWithTag("Monster").Length;
@@ -237,12 +237,13 @@ public class GameManager : MonoBehaviour
         {
             if (monster[i] == null)
             {
-                // int x = Random.Range(Row[3][0], Row[3][1]); // 디폴트는 3라인 - 테스트
+                int x = Random.Range(Row[3][0], Row[3][1]); // 디폴트는 3라인 - 테스트
+                if (Timeplus_Arrow == 0.6f)
+                    x = Random.Range(Row[5][0], Row[5][1]); // 스테이지 3단계면 5라인
+                else if (Timeplus_Arrow == 0.4f)
+                    x = Random.Range(Row[7][0], Row[7][1]); // 스테이지 5단계면 7라인
+
                 //int x = 3; // - 정방향으로만 몬스터가 나오는 테스트용
-                //if (Timeplus_Arrow == 0.6f)
-                //    x = Random.Range(Row[5][0], Row[5][1]); // 스테이지3단계면 5라인
-                //else if (Timeplus_Arrow == 0.4f)
-                int x = Random.Range(Row[7][0], Row[7][1]);   // 실제 쓰는 값
                 int y = Random.Range(1, 8);
                 //monster[i] = Instantiate(Monster_Prefabs, spawnPoints[x % 7].position + Vector3.up * (y % 7)
                 //    , Quaternion.identity, GameObject.Find("Canvas").transform.Find("GameObject").transform); // 새로운 몬스터 생성 Quaternion.identity : 회전값 지정 - 불필요

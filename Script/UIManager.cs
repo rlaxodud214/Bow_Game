@@ -48,11 +48,10 @@ public class UIManager : MonoBehaviour
         Player_damage_on(); // 데미지 패널 추가 - 오류나서 안됌
         GameManager.Instance.life = life;
         //life == 0이 되면 게임오버
-        //if (life < 0)
-        //{
-        //    DamagePanel.SetActive(false);
-        //    GameOver();                  // 생명이 없으므로 게임 오버메소드 호출
-        //}
+        if (life < 0)
+        {
+            GameOver();                  // 생명이 없으므로 게임 오버메소드 호출
+        }
     }
 
     public void GameOver() //게임오버+결과화면 함수

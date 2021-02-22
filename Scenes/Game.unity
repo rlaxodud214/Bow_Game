@@ -10031,8 +10031,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8609951225014989146, guid: 8dcb4d31318554a4ca0243ffba7028dd,
-          type: 3}
+      - m_Target: {fileID: 1237528647}
         m_MethodName: RePlay_inGame
         m_Mode: 1
         m_Arguments:
@@ -11005,8 +11004,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8609951225014989146, guid: 8dcb4d31318554a4ca0243ffba7028dd,
-          type: 3}
+      - m_Target: {fileID: 1237528647}
         m_MethodName: Home
         m_Mode: 1
         m_Arguments:
@@ -12477,7 +12475,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uC810\uC218 : "
+  m_Text: "\uC810\uC218 : 0"
 --- !u!1 &6789910899120677499
 GameObject:
   m_ObjectHideFlags: 0
