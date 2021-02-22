@@ -6,7 +6,6 @@ public class UIManager : MonoBehaviour
     public GameObject ResultPanel;
     public GameObject PausePanel;
     public GameObject StagePanel;
-    public GameObject DamagePanel;
     public GameObject Border_Life_Panel;
     public bool pause = false; // 일시정지시 몬스터 움직임을 없애기 위해서 선언
 
@@ -29,15 +28,12 @@ public class UIManager : MonoBehaviour
 
     public void Player_damage_on()  // 데미지 입었을때
     {
-        DamagePanel.SetActive(true);
-        PausePanel.gameObject.SetActive(true);
-        Border_Life_Panel.SetActive(false);
-        Invoke("Player_damage_off", 0.15f);
+        Border_Life_Panel.GetComponent<Image>().color = GameManager.Instance.HexToColor("EF2D2378");
+        Invoke("Player_damage_off", 0.3f);
     }
-    public void Player_damage_off() // 데미지 입었을때
+    public void Player_damage_off() // 원상태로 되돌리기
     {
-        Border_Life_Panel.SetActive(true);
-        DamagePanel.SetActive(false);
+        Border_Life_Panel.GetComponent<Image>().color = GameManager.Instance.HexToColor("5E5E0C31");
     }
 
     public void ui()
@@ -49,7 +45,7 @@ public class UIManager : MonoBehaviour
         if (life >= 0)
             Life[life+1].SetActive(false);     // 아까 life를 2로 초기화한 이유는 인덱스 값이 0 1 2 이므로 3번째 값을 호출할 때 2를 사용해서 2로 초기화 시킴.
         SoundManager.Instance.Player_damage();
-        // Player_damage_on(); // 데미지 패널 추가 - 오류나서 안됌
+        Player_damage_on(); // 데미지 패널 추가 - 오류나서 안됌
         GameManager.Instance.life = life;
         //life == 0이 되면 게임오버
         //if (life < 0)

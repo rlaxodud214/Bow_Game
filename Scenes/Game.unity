@@ -3505,80 +3505,6 @@ RectTransform:
   m_AnchoredPosition: {x: -5, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &924140466
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 924140467}
-  - component: {fileID: 924140469}
-  - component: {fileID: 924140468}
-  m_Layer: 5
-  m_Name: DamagePanel
-  m_TagString: DamagePanel
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!224 &924140467
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 924140466}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1471112241}
-  m_RootOrder: 7
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -455.40002}
-  m_SizeDelta: {x: 1820.0004, y: 69.20618}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &924140468
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 924140466}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 0.93725497, g: 0.1764706, b: 0.13725491, a: 0.19215687}
-  m_RaycastTarget: 1
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &924140469
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 924140466}
-  m_CullTransparentMesh: 0
 --- !u!1 &938444280
 GameObject:
   m_ObjectHideFlags: 0
@@ -4369,7 +4295,6 @@ MonoBehaviour:
   ResultPanel: {fileID: 6789910899074904518}
   PausePanel: {fileID: 6789910898909212236}
   StagePanel: {fileID: 1720086437}
-  DamagePanel: {fileID: 924140466}
   Border_Life_Panel: {fileID: 1249017092}
   pause: 0
 --- !u!114 &1237528647
@@ -4403,6 +4328,7 @@ MonoBehaviour:
   Stage_up: {fileID: 8300000, guid: 168647f9fee82e3438427a080e32aba3, type: 3}
   Button: {fileID: 8300000, guid: aaa9345fc5b00ea40b9cb0abb4bfa928, type: 3}
   arrow: {fileID: 8300000, guid: 0bd05763df902854a80475577a26666a, type: 3}
+  player_damage: {fileID: 8300000, guid: 63832e1e727999c4a92b109611fbf424, type: 3}
   btn1: {fileID: 6789910897253725908}
   btn2: {fileID: 6789910898983430205}
   btn1_Sprite_on: {fileID: 21300000, guid: e7ff8ffb2f30c4a898a73e447e53cc36, type: 3}
@@ -5283,7 +5209,6 @@ RectTransform:
   - {fileID: 490257379}
   - {fileID: 1337731556}
   - {fileID: 1362458982}
-  - {fileID: 924140467}
   m_Father: {fileID: 665068453}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

@@ -12,6 +12,7 @@ public class SoundManager : MonoBehaviour
     public AudioClip Stage_up;        // 스테이지 상승
     public AudioClip Button;          // 버튼클릭 효과음
     public AudioClip arrow;           // 화살 발사음
+    public AudioClip player_damage;
 
     // 메뉴패널 슬라이더 조절
     public Button btn1;
@@ -143,7 +144,6 @@ public class SoundManager : MonoBehaviour
     }
     public void Player_damage() // life 감소음
     {
-        // myAudio.PlayOneShot(player_damage); // 오디오 소스로 소리를 한 번 재생시킴
+        myAudio2.PlayOneShot(player_damage); // 오디오 소스로 소리를 한 번 재생시킴
     }
-    
 }

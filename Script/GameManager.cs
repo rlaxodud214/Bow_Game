@@ -93,8 +93,11 @@ public class GameManager : MonoBehaviour
         Monster_Speed_Real = new float[5] { 0.02f, 0.025f, 0.03f, 0.035f, 0.04f }; // 실제
         Monster_Speed_Test = new float[5] { 0.2f, 0.5f, 0.8f, 1.1f, 2f }; // 테스트용
         Monster_Spawn = new float[5] { 2.0f, 1.9f, 1.8f, 1.65f, 1.5f }; // 실제
-        MonsterSpeed = 0.01f; // 몬스터 이동속도 초기화
+
+        // MonsterSpeed = 0.01f; // 몬스터 이동속도 초기화 - 실제
+        MonsterSpeed = 0.08f; // 몬스터 이동속도 초기화 - 테스트용
         
+
         Arrow_Speed_Real = new int[5] { 6, 7, 8, 9, 10 }; // 실제
         Arrow_Speed_Test = new int[5] { 7, 8, 9, 10, 11 }; // 테스트용
         Arrow_Spawn = new float[5] { 1.0f, 0.95f, 0.9f, 0.85f, 0.8f }; // 실제
@@ -132,16 +135,16 @@ public class GameManager : MonoBehaviour
 
         // 가운데 일때 색상변경 - 영점 맞추기
         if (bullet.Instance.slider_value == 89 || bullet.Instance.slider_value == 90 || bullet.Instance.slider_value == 91)
-            GameObject.Find("orignOne").GetComponent<Image>().color = HexToColor("FF5E56");
+            GameObject.Find("orignOne").GetComponent<Image>().color = HexToColor("FF5E56AA");
         //else if ((int)bullet.Instance.slider_value / 10 == 8 || (int)bullet.Instance.slider_value / 10 == 9 || (int)bullet.Instance.slider_value / 10 == 10)
         //    GameObject.Find("orignOne").GetComponent<Image>().color = HexToColor("FDBF49");
         else if (bullet.Instance.slider_value == 20 || bullet.Instance.slider_value == 160)
-            GameObject.Find("orignOne").GetComponent<Image>().color = HexToColor("FF5E56");
+            GameObject.Find("orignOne").GetComponent<Image>().color = HexToColor("FF5E56AA");
         else
-            GameObject.Find("orignOne").GetComponent<Image>().color = HexToColor("27F6F6");
+            GameObject.Find("orignOne").GetComponent<Image>().color = HexToColor("27F6F6AA");
     }
 
-    public static Color HexToColor(string hex)
+    public Color HexToColor(string hex)
     {
         hex = hex.Replace("0x", "");
         hex = hex.Replace("#", "");
