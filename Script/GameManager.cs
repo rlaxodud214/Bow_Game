@@ -238,9 +238,9 @@ public class GameManager : MonoBehaviour
             if (monster[i] == null)
             {
                 int x = Random.Range(Row[3][0], Row[3][1]); // 디폴트는 3라인 - 테스트
-                if (Timeplus_Arrow == 0.6f)
+                if (Timeplus_Arrow == 0.9f)
                     x = Random.Range(Row[5][0], Row[5][1]); // 스테이지 3단계면 5라인
-                else if (Timeplus_Arrow == 0.4f)
+                else if (Timeplus_Arrow == 0.7f)
                     x = Random.Range(Row[7][0], Row[7][1]); // 스테이지 5단계면 7라인
 
                 //int x = 3; // - 정방향으로만 몬스터가 나오는 테스트용
