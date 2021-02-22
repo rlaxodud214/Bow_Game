@@ -67,9 +67,9 @@ public class UIManager : MonoBehaviour
     public void Menu() // 일시정지 버튼을 눌렀을때
     {
         SoundManager.Instance.Btn_Click();
-        Time.timeScale = 0f;
         pause = true;
         PausePanel.SetActive(true);
+        Time.timeScale = 0f;
     }
 
     public void Play() // 계속하기 버튼을 눌렀을때

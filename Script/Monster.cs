@@ -27,10 +27,10 @@ public class Monster : MonoBehaviour
     // 1 : 몬스터 2초마다 스폰, 2 : 몬스터 1.5초마다 스폰, 3 : 몬스터 1초마다 스폰, 4 : 몬스터 0.7초마다 스폰
     void Update()
     {
-        curPos = transform.position;
-        nextPos = Vector3.down * GameManager.Instance.MonsterSpeed * (Time.deltaTime * 50);
         if (!is_tutorial && !UIManager.Instance.pause)
         {
+            curPos = transform.position;
+            nextPos = Vector3.down * GameManager.Instance.MonsterSpeed * (Time.deltaTime * 50);
             transform.position = curPos + nextPos;
         }
     }
