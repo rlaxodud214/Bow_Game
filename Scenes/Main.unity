@@ -279,7 +279,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uC5F0\uC2B5\uD558\uAE30"
+  m_Text: "\uD29C\uD1A0\uB9AC\uC5BC"
 --- !u!222 &63828116
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -845,6 +845,7 @@ MonoBehaviour:
   Stage_up: {fileID: 8300000, guid: 168647f9fee82e3438427a080e32aba3, type: 3}
   Button: {fileID: 8300000, guid: aaa9345fc5b00ea40b9cb0abb4bfa928, type: 3}
   arrow: {fileID: 0}
+  player_damage: {fileID: 0}
   btn1: {fileID: 108236564}
   btn2: {fileID: 108236564}
   btn1_Sprite_on: {fileID: 7441861488978599509, guid: dd255f029b1eb1347b77fb335d97ea38,

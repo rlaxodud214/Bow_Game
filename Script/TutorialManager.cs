@@ -15,12 +15,19 @@ public class TutorialManager : MonoBehaviour
     public int tutoNum;                                    // 튜토리얼 순서를 int형 변수로 저장
     #endregion
 
-    public void StageUp() { tutoNum++; }
-
     public void Button()
     {
+        tutoNum++;
+
+        if (tutoNum == 2)
+            GameObject.Find("SubCamera").gameObject.transform.Find("Canvas").
+                gameObject.transform.Find("Tuto3_Area").gameObject.SetActive(true);
+        if (tutoNum == 3)
+            GameObject.Find("SubCamera").gameObject.transform.Find("Canvas").
+                gameObject.transform.Find("Tuto3_Area").gameObject.SetActive(false);
+        
         SoundManager.Instance.Btn_Click();                 // 버튼 클릭시 소리나게 함
-        Tuto[tutoNum].SetActive(false);
+        Tuto[tutoNum-1].SetActive(false);
         Tuto[tutoNum].SetActive(true);
     }
 }
