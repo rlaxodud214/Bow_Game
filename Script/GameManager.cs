@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
                      
 /*
@@ -61,7 +62,9 @@ public class GameManager : MonoBehaviour
     public int[] Arrow_Speed_Real; // 실제
     public int[] Arrow_Speed_Test; // 테스트용
     public float[] Arrow_Spawn;    // 실제
-    
+
+
+
     List<List<int>> Row = 
         new List<List<int>>() {  new List<int> { 0, 0 }, new List<int> { 0, 0 },
                                  new List<int> { 0, 0 }, new List<int> { 2, 5 },  // 3라인
@@ -121,6 +124,7 @@ public class GameManager : MonoBehaviour
         nextTime_Arrow += Timeplus_Arrow; // 제일 처음 화살과 겹쳐서 1초 이후에 부터 1초마다 생성시키기 위함
         // slider = GetComponent<Slider>();
         Debug.Log("Arrow_Spawn : " + Arrow_Spawn);
+
     }
     // 화살은 충돌시 말고 1초마다 생성 - 1초는 테스트후 조정
     void Update()
@@ -132,7 +136,7 @@ public class GameManager : MonoBehaviour
     public void ChangeColorAndRotation()
     {
         // Debug.Log("bullet.Instance.slider_value/10 : " + bullet.Instance.slider_value / 10);
-        Quaternion Direction = Quaternion.Euler(0, 0, (261 - bullet.Instance.slider_value)*1.2f);
+        Quaternion Direction = Quaternion.Euler(0, 0, (119 - bullet.Instance.slider_value)*1.2f);
         info.transform.rotation = Direction;
 
         // 가운데 일때 색상변경 - 영점 맞추기
@@ -237,7 +241,6 @@ public class GameManager : MonoBehaviour
         {
             if (monster[i] == null)
             {
-                Debug.Log("Timeplus_Arrow : " + Timeplus_Arrow);
                 int x = Random.Range(Row[3][0], Row[3][1]); // 디폴트는 3라인 - 테스트
                 if (Timeplus_Arrow == Arrow_Spawn[2])
                     x = Random.Range(Row[5][0], Row[5][1]); // 스테이지 3단계면 5라인
@@ -248,8 +251,8 @@ public class GameManager : MonoBehaviour
                 int y = Random.Range(1, 8);
                 //monster[i] = Instantiate(Monster_Prefabs, spawnPoints[x % 7].position + Vector3.up * (y % 7)
                 //    , Quaternion.identity, GameObject.Find("Canvas").transform.Find("GameObject").transform); // 새로운 몬스터 생성 Quaternion.identity : 회전값 지정 - 불필요
-                monster[i] = Instantiate(Monster_Prefabs, spawnPoints[x % 7].position + Vector3.up * (y % 7)
-                    , Quaternion.identity); //, GameObject.Find("Canvas").transform); // 새로운 몬스터 생성 Quaternion.identity : 회전값 지정 - 불필요
+                //, GameObject.Find("Canvas").transform); // 새로운 몬스터 생성 Quaternion.identity : 회전값 지정 - 불필요
+                monster[i] = Instantiate(Monster_Prefabs, spawnPoints[x % 7].position + Vector3.up * (y % 7), Quaternion.identity); 
                 return;
             }
         }
