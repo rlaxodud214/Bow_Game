@@ -51,8 +51,8 @@ public class GameManager : MonoBehaviour
     public int ArrowSpeed = 5; // 화살 이동속도
 
     // 스테이지별로 변하는 값들 배열로 선언
-    public int[] stage_up_Real = new int[5] { 40, 90, 150, 210, 280 }; // 실제
-    public int[] stage_up = new int[5] { 4, 9, 15, 21, 28 };           // 테스트용
+    public int[] stage_up = new int[5] { 20, 50, 90, 140, 200 };  // 실제
+    //public int[] stage_up = new int[5] { 4, 9, 15, 21, 28 };           // 테스트용
 
     public float[] Monster_Speed_Real;
     public float[] Monster_Speed_Test;
@@ -90,14 +90,15 @@ public class GameManager : MonoBehaviour
         _Instance = GetComponent<GameManager>();      // _gManager라는 변수에 자신의 GameManager 컴포넌트를 참조하는 값을 저장, Game속성에 set코드를 짜면 다르게 대입가능
         ArrowPos = Arrow.gameObject.transform.position; // 화살의 현재 위치를 받아온다.
 
-        Monster_Speed_Real = new float[5] { 0.025f, 0.03f, 0.035f, 0.04f, 0.045f }; // 실제
+        Monster_Speed_Real = new float[5] { 0.020f, 0.024f, 0.028f, 0.032f, 0.036f }; // 실제
         Monster_Speed_Test = new float[5] { 0.2f, 0.5f, 0.8f, 1.1f, 2f };  // 테스트용
         Monster_Spawn = new float[5] { 2.0f, 1.9f, 1.8f, 1.65f, 1.5f }; // 실제
 
-        MonsterSpeed = 0.01f; // 몬스터 이동속도 초기화 - 실제
+        MonsterSpeed = 0.016f; // 몬스터 이동속도 초기화 - 실제
         // MonsterSpeed = 0.08f; // 몬스터 이동속도 초기화 - 테스트용
-        
 
+        // stage_up = new int[5] { 20, 50, 90, 140, 200 };  // 실제
+        stage_up = new int[5] { 15, 30, 45, 60, 75 };    // 약간 테스트
         Arrow_Speed_Real = new int[5] { 7, 7, 8, 8, 9 }; // 실제
         Arrow_Speed_Test = new int[5] { 7, 7, 8, 8, 9 }; // 테스트용
         Arrow_Spawn = new float[5] { 1.0f, 1.0f, 0.9f, 0.9f, 0.8f }; // 실제
@@ -119,6 +120,7 @@ public class GameManager : MonoBehaviour
     {
         nextTime_Arrow += Timeplus_Arrow; // 제일 처음 화살과 겹쳐서 1초 이후에 부터 1초마다 생성시키기 위함
         // slider = GetComponent<Slider>();
+        Debug.Log("Arrow_Spawn : " + Arrow_Spawn);
     }
     // 화살은 충돌시 말고 1초마다 생성 - 1초는 테스트후 조정
     void Update()
@@ -163,16 +165,14 @@ public class GameManager : MonoBehaviour
         // Debug.LogError((i + 2) + "스테이지 진입");
         Debug.Log((i + 2) + "스테이지 진입");
 
-        UIManager.Instance.StagePanel_on();
+        UIManager.Instance.StagePanel_on(i);
         // MonsterSpeed = Monster_Speed_Test[i];
         MonsterSpeed = Monster_Speed_Real[i];
         ArrowSpeed = Arrow_Speed_Test[i];
         
-        RESULT_score.text = "점수 : " + (count * 10).ToString();
-        RESULT_time.text = "게임시간 : " + time.ToString("N1") + "초";
         Count.text = "잡은 몬스터 수 : " + count.ToString();
         Debug.Log("MonsterSpeed : " + MonsterSpeed);
-        // Debug.Log("ArrowSpeed : " + ArrowSpeed);
+        Debug.Log("ArrowSpeed : " + ArrowSpeed);
     }
     public void countPlus() { 
         count++;
@@ -228,7 +228,7 @@ public class GameManager : MonoBehaviour
             }
         }
         if (count > stage_up[4]) {
-            Timeplus_Monster = 0.7f - count*0.001f;
+            Timeplus_Monster = Monster_Spawn[4] - (count - stage_up[4]) * 0.01f;
             Timeplus_Arrow = 0.7f;
         }
 
@@ -237,10 +237,11 @@ public class GameManager : MonoBehaviour
         {
             if (monster[i] == null)
             {
+                Debug.Log("Timeplus_Arrow : " + Timeplus_Arrow);
                 int x = Random.Range(Row[3][0], Row[3][1]); // 디폴트는 3라인 - 테스트
-                if (Timeplus_Arrow == 0.9f)
+                if (Timeplus_Arrow == Arrow_Spawn[2])
                     x = Random.Range(Row[5][0], Row[5][1]); // 스테이지 3단계면 5라인
-                else if (Timeplus_Arrow == 0.7f)
+                else if (Timeplus_Arrow < Arrow_Spawn[4])
                     x = Random.Range(Row[7][0], Row[7][1]); // 스테이지 5단계면 7라인
 
                 //int x = 3; // - 정방향으로만 몬스터가 나오는 테스트용

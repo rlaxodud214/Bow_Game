@@ -25,7 +25,7 @@ public class SoundManager : MonoBehaviour
     public Slider backVSlider2;
     public float backvol1 = 0.5f;
     public float backvol2 = 0.5f;
-
+    public bool clear = false;
     // public AudioClip player_damage;      // life 감소시
 
 
@@ -61,8 +61,11 @@ public class SoundManager : MonoBehaviour
     }
     private void Update()
     {
-        soundslider1();
-        soundslider2();
+        if(!clear)
+        {
+            soundslider1();
+            soundslider2();
+        }
     }
 
     public void soundslider1()
@@ -136,6 +139,10 @@ public class SoundManager : MonoBehaviour
     }
     public void Gameover() // 몬스터 사망음
     {
+        // 배경음이랑 물려서 수정
+        myAudio1.volume = 0f;
+        backVSlider1.value = 0f;
+        clear = true;
         myAudio2.PlayOneShot(GameOver); // 오디오 소스로 소리를 한 번 재생시킴
     }
     public void Arrow()
