@@ -12,7 +12,7 @@ public class TutorialManager : MonoBehaviour
 {
     #region Singleton  
     // public GameObject[] Monster = new GameObject[4];         // 게임내 4개의 이미지 UI를 저장할 배열선언 및 초기회
-    public GameObject[] Tuto = new GameObject[4];          // 캐릭터와 텍스트를 가진 이미지 파일을 저장할 배열선언 및 초기회 
+    public GameObject[] Tuto = new GameObject[7];          // 캐릭터와 텍스트를 가진 이미지 파일을 저장할 배열선언 및 초기회 
     public GameObject CountDown;
     public GameObject backPanel;
     public int tutoNum;                                 // 튜토리얼 순서를 int형 변수로 저장
@@ -40,15 +40,45 @@ public class TutorialManager : MonoBehaviour
     {
         tutoNum++;
         SoundManager.Instance.Btn_Click();                 // 버튼 클릭시 소리나게 함
-        Tuto[tutoNum - 1].SetActive(false);
 
-        if (tutoNum == 4)
+        if (tutoNum < 4)
+            Tuto[tutoNum - 1].SetActive(false);
+        
+        switch(tutoNum)
+        {
+            // 슬라이더 연습 안내
+            case 5:
+                Tuto[4].SetActive(true);
+                break;
+
+            // 슬라이더 5초 연습시작
+            case 6:
+                Tuto[4].SetActive(false);
+                break;
+
+            // 몬스터 4마리 스폰 안내
+            case 7:
+                Tuto[5].SetActive(true);
+                break;
+
+            // 몬스터 4마리 스폰
+            case 8:
+                Tuto[5].SetActive(false);
+                break;
+
+            // 잘하셨어요! 그럼 이제 게임을 시작해볼까요?
+            case 9:
+                Tuto[6].SetActive(true);
+                break;
+        }
+
+        if (tutoNum == 10)
         {
             check = true;
             Start();
         }
-            
-        else
+        
+        if (tutoNum < 4)
             Tuto[tutoNum].SetActive(true);
     }
 
@@ -59,10 +89,10 @@ public class TutorialManager : MonoBehaviour
             backPanel.SetActive(false);
             CountDown.SetActive(true);   // 카운트 다운하는 패널 true
             
-            GameObject.Find("CountDown_Text").GetComponent<Text>().text = "5";
-            yield return new WaitForSeconds(1.0f);
-            GameObject.Find("CountDown_Text").GetComponent<Text>().text = "4";
-            yield return new WaitForSeconds(1.0f);
+            //GameObject.Find("CountDown_Text").GetComponent<Text>().text = "5";
+            //yield return new WaitForSeconds(1.0f);
+            //GameObject.Find("CountDown_Text").GetComponent<Text>().text = "4";
+            //yield return new WaitForSeconds(1.0f);
             GameObject.Find("CountDown_Text").GetComponent<Text>().text = "3";
             yield return new WaitForSeconds(1.0f);
             GameObject.Find("CountDown_Text").GetComponent<Text>().text = "2";
