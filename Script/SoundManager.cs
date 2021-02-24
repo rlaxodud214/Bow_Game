@@ -25,6 +25,8 @@ public class SoundManager : MonoBehaviour
     public Slider backVSlider2;
     public float backvol1 = 0.5f;
     public float backvol2 = 0.5f;
+    public float backupvol1;
+    public float backupvol2;
     public bool clear = false;
     // public AudioClip player_damage;      // life 감소시
 
@@ -42,6 +44,8 @@ public class SoundManager : MonoBehaviour
         {
             SoundManager.Instance = this;   // 자기 자신을 참조하는 인스턴스 생성
         }
+        backupvol1 = 0f;
+        backupvol2 = 0f;
     }
     #endregion
 
@@ -90,14 +94,15 @@ public class SoundManager : MonoBehaviour
     }
     public void no_backsound1()
     {
-        if(backVSlider1.value == 0)
+        if (backVSlider1.value == 0)
         {
-            myAudio1.volume = 0.4f;
-            backVSlider1.value = 0.4f;
+            myAudio1.volume = backupvol1;
+            backVSlider1.value = backupvol1;
             btn1.GetComponent<Image>().sprite = btn1_Sprite_on;
         }
         else
         {
+            backupvol1 = myAudio1.volume;
             myAudio1.volume = 0f;
             backVSlider1.value = 0f;
             btn1.GetComponent<Image>().sprite = btn1_Sprite_off;
@@ -108,12 +113,13 @@ public class SoundManager : MonoBehaviour
     {
         if (backVSlider2.value == 0)
         {
-            myAudio2.volume = 0.4f;
-            backVSlider2.value = 0.4f;
+            myAudio2.volume = backupvol2;
+            backVSlider2.value = backupvol2;
             btn2.GetComponent<Image>().sprite = btn2_Sprite_on;
         }
         else
         {
+            backupvol2 = myAudio2.volume;
             myAudio2.volume = 0f;
             backVSlider2.value = 0f;
             btn2.GetComponent<Image>().sprite = btn2_Sprite_off;

@@ -44,6 +44,7 @@ public class GameManager : MonoBehaviour
     // 몬스터 오브젝트
     public GameObject Monster_Prefabs;  // 몬스터 복제시 사용할 프리팹
     public List<GameObject> monster = new List<GameObject>();
+    public int monsterMaxSpwanCount; // 최대 몬스터 수
     public Transform[] spawnPoints; // 몬스터 생성시 위치 배열
     public int monster_count = 0;
 
@@ -63,13 +64,13 @@ public class GameManager : MonoBehaviour
     public int[] Arrow_Speed_Test; // 테스트용
     public float[] Arrow_Spawn;    // 실제
 
+    public bool isTuto;
 
-
-    List<List<int>> Row = 
-        new List<List<int>>() {  new List<int> { 0, 0 }, new List<int> { 0, 0 },
-                                 new List<int> { 0, 0 }, new List<int> { 2, 5 },  // 3라인
-                                 new List<int> { 0, 0 }, new List<int> { 1, 6 },  // 5라인
+    List<List<int>> Row = new List<List<int>>() {  new List<int> { 0, 0 }, new List<int> { 0, 0 },
+                                 new List<int> { 0, 0 }, new List<int> { 2, 5 },   // 3라인
+                                 new List<int> { 0, 0 }, new List<int> { 1, 6 },   // 5라인
                                  new List<int> { 0, 0 }, new List<int> { 0, 7 } }; // 7라인
+
     // 슬라이더 이벤트를 처리하는 2가지 방법
     // 1. 슬라이더의 값이 바뀔때, 함수를 호출하는 방법
     // 2. 스트립트에서 슬라이더에 접근해서 처리하는 방식 -> 사용
@@ -90,8 +91,8 @@ public class GameManager : MonoBehaviour
 
     void Awake()                                      // 제일 처음 호출되는 함수
     {
+        isTuto = false;
         _Instance = GetComponent<GameManager>();      // _gManager라는 변수에 자신의 GameManager 컴포넌트를 참조하는 값을 저장, Game속성에 set코드를 짜면 다르게 대입가능
-        ArrowPos = Arrow.gameObject.transform.position; // 화살의 현재 위치를 받아온다.
 
         Monster_Speed_Real = new float[5] { 0.020f, 0.024f, 0.028f, 0.032f, 0.036f }; // 실제
         Monster_Speed_Test = new float[5] { 0.2f, 0.5f, 0.8f, 1.1f, 2f };  // 테스트용
@@ -108,7 +109,8 @@ public class GameManager : MonoBehaviour
         ArrowSpeed = 6;
 
         slider.value = 90;
-        for (int i = 0; i < 10; i++) {
+        monsterMaxSpwanCount = 25;  // 최대 몬스터 수
+        for (int i = 0; i < monsterMaxSpwanCount; i++) {  //1234
             monster.Add(null);
         }
         RESULT_stage.text = "1";
@@ -124,13 +126,14 @@ public class GameManager : MonoBehaviour
         nextTime_Arrow += Timeplus_Arrow; // 제일 처음 화살과 겹쳐서 1초 이후에 부터 1초마다 생성시키기 위함
         // slider = GetComponent<Slider>();
         Debug.Log("Arrow_Spawn : " + Arrow_Spawn);
-
+        ArrowPos = Arrow.gameObject.transform.position; // 화살의 현재 위치를 받아온다.
+        if (isTuto) { ArrowPos.z = 95f; }
     }
     // 화살은 충돌시 말고 1초마다 생성 - 1초는 테스트후 조정
     void Update()
     {
         time += Time.deltaTime;
-        Create_Object();
+        Create_Object(); //1234
         ChangeColorAndRotation();
     }
     public void ChangeColorAndRotation()
@@ -204,7 +207,7 @@ public class GameManager : MonoBehaviour
         if (time > nextTime_Monster)
         {
             // Debug.Log("몬스터 생성 : " + time);
-            Create_Monster();
+            Create_Monster(); //1234
             nextTime_Monster += Timeplus_Monster; // Timeplus : 몬스터 생성주기
         }
     }
@@ -218,13 +221,13 @@ public class GameManager : MonoBehaviour
         SoundManager.Instance.Arrow();
     }
 
-    public void Create_Monster()
+    public void Create_Monster() //1234
     {
         // stage_up = new int[5] { 40, 90, 150, 210, 280 };
         // Monster_Spawn = new float[5] { 2.0f, 1.7f, 1.3f, 1.0f, 0.7f }; // 실제
         // Arrow_Spawn = new float[5] { 0.9f, 0.8f, 0.7f, 0.6f, 0.5f }; // 실제
 
-        for(int i=0; i< stage_up.Length; i++)  {
+        for(int i = 0; i < stage_up.Length; i++)  {
             if (count <= stage_up[i]) {
                 Timeplus_Monster = Monster_Spawn[i];
                 Timeplus_Arrow = Arrow_Spawn[i];
@@ -241,18 +244,15 @@ public class GameManager : MonoBehaviour
         {
             if (monster[i] == null)
             {
-                int x = Random.Range(Row[3][0], Row[3][1]); // 디폴트는 3라인 - 테스트
+                int x = Random.Range(2, 5); // 디폴트는 3라인 - 테스트
                 if (Timeplus_Arrow == Arrow_Spawn[2])
-                    x = Random.Range(Row[5][0], Row[5][1]); // 스테이지 3단계면 5라인
+                    x = Random.Range(1, 6); // 스테이지 3단계면 5라인
                 else if (Timeplus_Arrow < Arrow_Spawn[4])
-                    x = Random.Range(Row[7][0], Row[7][1]); // 스테이지 5단계면 7라인
+                    x = Random.Range(0, 7); // 스테이지 5단계면 7라인
 
                 //int x = 3; // - 정방향으로만 몬스터가 나오는 테스트용
                 int y = Random.Range(1, 8);
-                //monster[i] = Instantiate(Monster_Prefabs, spawnPoints[x % 7].position + Vector3.up * (y % 7)
-                //    , Quaternion.identity, GameObject.Find("Canvas").transform.Find("GameObject").transform); // 새로운 몬스터 생성 Quaternion.identity : 회전값 지정 - 불필요
-                //, GameObject.Find("Canvas").transform); // 새로운 몬스터 생성 Quaternion.identity : 회전값 지정 - 불필요
-                monster[i] = Instantiate(Monster_Prefabs, spawnPoints[x % 7].position + Vector3.up * (y % 7), Quaternion.identity); 
+                monster[i] = Instantiate(Monster_Prefabs, spawnPoints[x].position, Quaternion.identity); //count는 처리한 몬스터 수
                 return;
             }
         }

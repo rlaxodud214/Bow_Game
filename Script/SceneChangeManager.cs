@@ -30,10 +30,6 @@ public class SceneChangeManager : MonoBehaviour
         time = 0;
     }
 
-    private void Update()
-    {
-
-    }
     public void RePlay_inGame() // 다시시작 버튼을 눌렀을때
     {
         Time.timeScale = 1f;
