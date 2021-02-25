@@ -18,7 +18,7 @@ public class UIManager : MonoBehaviour
     // 인스턴스에 접근하기 위한 프로퍼티
     public static UIManager Instance
     {
-        get { return _Instance; }  // UIManager 인스턴스 변수를 리턴
+        get { return _Instance; }          // UIManager 인스턴스 변수를 리턴
     }
 
     // 인스턴스 변수 초기화
@@ -60,10 +60,9 @@ public class UIManager : MonoBehaviour
     {
         Time.timeScale = 0f;
         // 캔버스의 서브카메라가 결과 패널을 가려서 false 시킴
-        GameObject.Find("SubCamera").gameObject.SetActive(false); 
         SoundManager.Instance.Gameover();
         GameManager.Instance.RESULT_score.text = "점수 : " + (GameManager.Instance.count * 10).ToString();
-        GameManager.Instance.RESULT_time.text = "게임시간 : " + GameManager.Instance.time.ToString("N1") + "초";
+        GameManager.Instance.RESULT_time.text = "게임시간 : " + GameManager.Instance.time.ToString("N2") + "초";
         ResultPanel.SetActive(true);
     }
 
@@ -86,9 +85,8 @@ public class UIManager : MonoBehaviour
     public void StagePanel_on(int i)
     {
         SoundManager.Instance.stageUp();
-
         StagePanel.SetActive(true);
-        
+
         if (i == 1 || i == 3) // 3스테이지 or 5스테이지
         {
             Monster_Spawn_Slot_Up.gameObject.SetActive(true);
@@ -96,13 +94,18 @@ public class UIManager : MonoBehaviour
             Invoke("StagePanel_off", 1.5f);
         }
         else
+        {
             Invoke("StagePanel_off", 1.2f);
+        }
+        UIManager.Instance.pause = true;
     }
 
     public void StagePanel_off()
     {
-        if(check)
+        UIManager.Instance.pause = false;
+        if (check)
             Monster_Spawn_Slot_Up.gameObject.SetActive(false);
+        
         StagePanel.SetActive(false);
     }
 }

@@ -33,12 +33,15 @@ public class bullet : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        time += Time.deltaTime;
-        slider_value = slider.GetComponent<Slider>().value;
-        Rotation_angle = 180 - slider_value; //20 ~ 160 중간값 90
-        if (time < 0.2f)
-            transform.rotation = Quaternion.Euler(0, 0, Rotation_angle);
-        transform.Translate(Vector3.left * -1f * Time.deltaTime * GameManager.Instance.ArrowSpeed, Space.Self);  //(0,1,0)
+        if(!UIManager.Instance.pause)
+        {
+            time += Time.deltaTime;
+            slider_value = slider.GetComponent<Slider>().value;
+            Rotation_angle = 180 - slider_value; //20 ~ 160 중간값 90
+            if (time < 0.2f)
+                transform.rotation = Quaternion.Euler(0, 0, Rotation_angle);
+            transform.Translate(Vector3.left * -1f * Time.deltaTime * GameManager.Instance.ArrowSpeed, Space.Self);  //(0,1,0)
+        }
     }
 
     void OnTriggerEnter2D(Collider2D collision) // 화살 제거
@@ -51,11 +54,13 @@ public class bullet : MonoBehaviour
             
         if (collision.gameObject.tag == "Monster")
         {
-            GameManager.Instance.countPlus();
-            // Debug.Log("Score : " + Score);
-            SoundManager.Instance.Monster_die();
-            Destroy(gameObject);
-            Destroy(collision.gameObject);
+            if(!GameManager.Instance.isTuto) // 튜토리얼에서 몬스터 생성후 안내중 화살에 제거되는 거 방지
+            {
+                GameManager.Instance.countPlus();
+                SoundManager.Instance.Monster_die();
+                Destroy(gameObject);
+                Destroy(collision.gameObject);
+            }
         }
     }
 }

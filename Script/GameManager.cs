@@ -84,16 +84,15 @@ public class GameManager : MonoBehaviour
 
     private static GameManager _Instance;             // 싱글톤 객체 선언, 어디에서든지 접근할 수 있도록 하기위해 
 
-    public static GameManager Instance                    // 객체에 접근하기 위한 속성으로 내부에 get set을 사용한다.
+    public static GameManager Instance                // 객체에 접근하기 위한 속성으로 내부에 get set을 사용한다.
     {
         get { return _Instance; }                     // GameManager 객체 리턴
     }
 
     void Awake()                                      // 제일 처음 호출되는 함수
     {
-        isTuto = false;
         _Instance = GetComponent<GameManager>();      // _gManager라는 변수에 자신의 GameManager 컴포넌트를 참조하는 값을 저장, Game속성에 set코드를 짜면 다르게 대입가능
-
+        isTuto = false;
         Monster_Speed_Real = new float[5] { 0.020f, 0.024f, 0.028f, 0.032f, 0.036f }; // 실제
         Monster_Speed_Test = new float[5] { 0.2f, 0.5f, 0.8f, 1.1f, 2f };  // 테스트용
         Monster_Spawn = new float[5] { 2.0f, 1.9f, 1.8f, 1.65f, 1.5f }; // 실제
@@ -102,7 +101,9 @@ public class GameManager : MonoBehaviour
         // MonsterSpeed = 0.08f; // 몬스터 이동속도 초기화 - 테스트용
 
         // stage_up = new int[5] { 20, 50, 90, 140, 200 };  // 실제
-        stage_up = new int[5] { 15, 30, 45, 60, 75 };    // 약간 테스트
+        stage_up = new int[5] { 10, 20, 30, 40, 50 };    // 약간 테스트
+        // stage_up = new int[5] { 4, 8, 12, 16, 20 };       // 테스트
+
         Arrow_Speed_Real = new int[5] { 7, 7, 8, 8, 9 }; // 실제
         Arrow_Speed_Test = new int[5] { 7, 7, 8, 8, 9 }; // 테스트용
         Arrow_Spawn = new float[5] { 1.0f, 1.0f, 0.9f, 0.9f, 0.8f }; // 실제
@@ -132,7 +133,8 @@ public class GameManager : MonoBehaviour
     // 화살은 충돌시 말고 1초마다 생성 - 1초는 테스트후 조정
     void Update()
     {
-        time += Time.deltaTime;
+        if (!UIManager.Instance.pause) // 정지중일땐 time 안 올라가게~
+            time += Time.deltaTime;
         Create_Object(); //1234
         ChangeColorAndRotation();
     }
@@ -146,7 +148,7 @@ public class GameManager : MonoBehaviour
         if (bullet.Instance.slider_value == 89 || bullet.Instance.slider_value == 90 || bullet.Instance.slider_value == 91)
             GameObject.Find("orignOne").GetComponent<Image>().color = HexToColor("FF5E56AA");
         //else if ((int)bullet.Instance.slider_value / 10 == 8 || (int)bullet.Instance.slider_value / 10 == 9 || (int)bullet.Instance.slider_value / 10 == 10)
-        //    GameObject.Find("orignOne").GetComponent<Image>().color = HexToColor("FDBF49");
+        //    GameObject.Find("orignOne").GetComponent<Image>().color = HexToColor("FDBF49AA");
         else if (bullet.Instance.slider_value == 20 || bullet.Instance.slider_value == 160)
             GameObject.Find("orignOne").GetComponent<Image>().color = HexToColor("FF5E56AA");
         else

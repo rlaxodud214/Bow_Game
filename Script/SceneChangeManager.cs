@@ -8,6 +8,7 @@ public class SceneChangeManager : MonoBehaviour
 {
     public int time;
     public bool pass;
+    public GameObject Main_Monster;
 
     #region Singleton
     private static SceneChangeManager _Instance;    // 싱글톤 패턴을 사용하기 위한 인스턴스 변수, static으로 선언하여 어디서든 접근 가능
@@ -65,5 +66,22 @@ public class SceneChangeManager : MonoBehaviour
 #else
                         Application.Quit(); // 어플리케이션 종료
 #endif
+    }
+
+    public void Main_Monster_Animation()
+    {
+        Debug.Log("Main_Monster_Animation() 호출 완료");
+        Animator my_animator = Main_Monster.gameObject.GetComponent<Animator>();
+
+        switch(Random.Range(0, 2))
+        {
+            case 0:
+                my_animator.SetTrigger("attack");
+                break;
+
+            case 1:
+                my_animator.SetTrigger("attack02");
+                break;
+        }
     }
 }
