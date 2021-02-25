@@ -31,6 +31,7 @@ public class TutorialManager : MonoBehaviour
     
     public void Awake()
     {
+        _Instance = this;
         check = false;
         check_wait = false;
         GameClear = false;

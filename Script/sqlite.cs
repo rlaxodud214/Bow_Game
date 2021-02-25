@@ -46,26 +46,12 @@ public class sqlite : MonoBehaviour
         }
         Debug.Log("db생성 완료");
     }
-    
-    public string GetDBFilePath() //파일 경로를 가져오는 코드 
-    {
-        string str = string.Empty;
-        if(Application.platform==RuntimePlatform.Android)
-        {
-            str = "URI=file:" + Application.persistentDataPath + "/StreamingAssets/test1.db";
-        }
-        else
-        {
-            str = "URI=file:" + Application.dataPath + "/StreamingAssets/test1.db";
-        }
-        return str;
-    }
 
     void Start()
     {
         DbConnectionCHek();
-        DatabaseInsert("Insert into test(test, testID) VALUES(\"hi\",\"hello|\")");
-        DataBaseRead("SELECT * FROM test"); //DB명이 아닌 파일명
+        DatabaseInsert("Insert into Game(userID, gameID, angleOfRotation, gamePlayTime, gameScore, bestScore, rotationSpeed) VALUES(\"유저아이디4\",\"게임아이디4\", 1.0, 93.5, 1000, 1670, 0.2)"); // 테이블이름(컬럼1, 컬럼2) VALUES(값1, 값2)
+        DataBaseRead("SELECT * FROM Game"); //DB명이 아닌 파일명
         //Select * From test Where testID = "hi" : 사용 예시
     }
 
@@ -74,10 +60,9 @@ public class sqlite : MonoBehaviour
         try
         {
             IDbConnection dbConnection = new SqliteConnection(GetDBFilePath());
+            dbConnection.Open(); // DB열기
 
-            dbConnection.Open();
-
-            if (dbConnection.State == ConnectionState.Open)
+            if (dbConnection.State == ConnectionState.Open) // DB상태가 잘 열렸다면
             {
                 Debug.Log("db 연결 성공");
                 test.text = "db 연결 성공";
@@ -95,14 +80,28 @@ public class sqlite : MonoBehaviour
         }
     }
 
+    public string GetDBFilePath() //파일 경로를 가져오는 코드 
+    {
+        string str = string.Empty;
+        if (Application.platform == RuntimePlatform.Android)
+        {
+            str = "URI=file:" + Application.persistentDataPath + "/StreamingAssets/reupex.db";
+        }
+        else
+        {
+            str = "URI=file:" + Application.dataPath + "/StreamingAssets/reupex.db";
+        }
+        return str;
+    }
+
     public void DatabaseInsert(string query) //삽입이라고 썼지만 삭제도 가능
     {
         IDbConnection dbConnection = new SqliteConnection(GetDBFilePath());
-        dbConnection.Open();
+        dbConnection.Open();            // DB 열기
         IDbCommand dbCommand = dbConnection.CreateCommand();
 
-        dbCommand.CommandText = query;
-        dbCommand.ExecuteNonQuery();
+        dbCommand.CommandText = query;  // 쿼리 입력
+        dbCommand.ExecuteNonQuery();    // 쿼리 실행
 
         dbCommand.Dispose();
         dbCommand = null;
@@ -110,23 +109,36 @@ public class sqlite : MonoBehaviour
         dbConnection = null;
     }
 
-    public void DataBaseRead(String query) //DB 읽어오기
+    public void DataBaseRead(String query) //DB 읽어오기 - 인자로 쿼리문을 받는다.
     {
         IDbConnection dbConnection = new SqliteConnection(GetDBFilePath());
-        dbConnection.Open();
+        dbConnection.Open();           // DB 열기
         IDbCommand dbCommand = dbConnection.CreateCommand();
-        dbCommand.CommandText= query;
-        IDataReader dataReader = dbCommand.ExecuteReader();
-        while(dataReader.Read())
+        dbCommand.CommandText= query;  // 쿼리 입력
+        IDataReader dataReader = dbCommand.ExecuteReader(); // 쿼리 실행
+        int count = 0;
+        int maxScore = 0;
+        while (dataReader.Read())                            // 쿼리로 돌아온 레코드 읽기
         {
-            Debug.Log(dataReader.GetString(0));
-            test.text = dataReader.GetString(0);
+            //if (dataReader.GetString(0) > maxScore)
+            //{
+
+            //}
+            Debug.Log(dataReader.GetString(0));   // 0번 필드 읽기
+            // test.text = "최고점수 : " + dataReader.GetString(5);
+            count++;
         }
-        dataReader.Dispose();
+        dataReader.Dispose();                     // 생성순서와 반대로 닫아줍니다.
         dataReader = null;
         dbCommand.Dispose();
         dbCommand = null;
-        dbConnection.Close();
+        dbConnection.Close();                     // DB에는 1개의 쓰레드만이 접근할 수 있고 동시에 접근시 에러가 발생한다. 그래서 Open과 Close는 같이 써야한다.
         dbConnection = null;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
     }
 }
