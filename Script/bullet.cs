@@ -58,8 +58,8 @@ public class bullet : MonoBehaviour
             {
                 GameManager.Instance.countPlus();
                 SoundManager.Instance.Monster_die();
-                Destroy(gameObject);
                 Destroy(collision.gameObject);
+                Destroy(gameObject);
             }
         }
     }

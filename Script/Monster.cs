@@ -10,6 +10,7 @@ public class Monster : MonoBehaviour
     public int maxMonsterCount = 10;
     public bool is_tutorial = false;
     public Vector3 curPos, nextPos;
+    public bool check;
 
     private static Monster _Instance;          // 싱글톤 패턴을 사용하기 위한 인스턴스 변수, static 선언으로 어디서든 참조가 가능함
     public static Monster Instance                    // 객체에 접근하기 위한 속성으로 내부에 get set을 사용한다.
@@ -20,10 +21,14 @@ public class Monster : MonoBehaviour
     void Awake()                                               // Start()보다 먼저 실행
     {
         _Instance = GetComponent<Monster>();    // _sceneManager변수에 자신의 SceneChangeManager 컴포넌트를 넣는다.
+        check = false;
     }
     #endregion 
 
-
+    private void Start()
+    {
+        // StartCoroutine(Damage());
+    }
     // 1 : 몬스터 2초마다 스폰, 2 : 몬스터 1.5초마다 스폰, 3 : 몬스터 1초마다 스폰, 4 : 몬스터 0.7초마다 스폰
     void Update()
     {
@@ -34,17 +39,6 @@ public class Monster : MonoBehaviour
             transform.position = curPos + nextPos;
         }
     }
-
-    //void FixedUpdate()
-    //{
-    //    Debug.Log("FixedUpdate() 호출완료");
-    //    curPos = transform.position;
-    //    nextPos = Vector3.down * GameManager.Instance.MonsterSpeed;
-    //    if (!is_tutorial && !UIManager.Instance.pause)
-    //    {
-    //        transform.position = curPos + nextPos;
-    //    }
-    //}
 
     void OnTriggerEnter2D(Collider2D collision) // 제거
     {
@@ -60,10 +54,33 @@ public class Monster : MonoBehaviour
                 Destroy(gameObject);
             }
         }
+
         if (collision.gameObject.tag == "Life")
         {
             UIManager.Instance.ui();
             Destroy(gameObject);
         }
+
+        //if (collision.gameObject.tag == "Arrow")
+        //{
+        //    if (!GameManager.Instance.isTuto) // 튜토리얼에서 몬스터 생성후 안내중 화살에 제거되는 거 방지 
+        //    {
+        //        GameManager.Instance.countPlus();
+        //        SoundManager.Instance.Monster_die();
+        //        check = true;
+        //        Destroy(collision.gameObject);
+        //        Start();
+        //    }
+        //}
     }
+
+    //public IEnumerator Damage()
+    //{
+    //    if(check)
+    //    {
+    //        this.GetComponent<Animator>().SetTrigger("damage");
+    //        yield return new WaitForSeconds(0.2f);
+    //        Destroy(gameObject);
+    //    }
+    //}
 }

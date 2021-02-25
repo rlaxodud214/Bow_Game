@@ -590,7 +590,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uC2AC\uB77C\uC774\uB354\uB85C \uD654\uC0B4\uC774 \uB098\uAC08\n\uBC29\uD5A5\uC744
+  m_Text: "\uB514\uBC14\uC774\uC2A4\uB85C \uD654\uC0B4\uC774 \uB098\uAC08\n\uBC29\uD5A5\uC744
     \uC870\uC885\uD560 \uC218 \uC788\uC2B5\uB2C8\uB2E4.\n\n\uD654\uC0B4\uC740 \uC77C\uC815\uC8FC\uAE30\uC5D0
     \uB530\uB77C \n\uC790\uB3D9\uC73C\uB85C \uBC1C\uC0AC\uB429\uB2C8\uB2E4.\n\n"
 --- !u!222 &244237695
@@ -1219,7 +1219,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uBAAC\uC2A4\uD130\uB97C \uC7A1\uAE30 \uC804\uC5D0 \uBA3C\uC800 \uC2AC\uB77C\uC774\uB354\uB97C
+  m_Text: "\uBAAC\uC2A4\uD130\uB97C \uC7A1\uAE30 \uC804\uC5D0 \uBA3C\uC800 \uB514\uBC14\uC774\uC2A4\uB97C
     \uC6C0\uC9C1\uC5EC\uC11C \uD654\uC0B4\uC758 \uBC29\uD5A5\uC744 \uBCC0\uACBD\uD574\uBCF4\uC138\uC694."
 --- !u!222 &616752635
 CanvasRenderer:
@@ -13326,6 +13326,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   time: 0
   pass: 0
+  Main_Monster: {fileID: 0}
 --- !u!114 &8609951225601985037
 MonoBehaviour:
   m_ObjectHideFlags: 0
