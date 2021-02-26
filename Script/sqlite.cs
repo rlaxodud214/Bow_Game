@@ -138,7 +138,7 @@ public class sqlite : MonoBehaviour
 
             // 빌드시 에러확인을 위해 넣음 결과패널에 Game Over대신 에러 나오게 하는 코드
             test_Result.GetComponent<Text>().fontSize = 30; // 폰트 사이즈 작게 변경 - 이유 : 오류가 길어서
-            test_Result.text = e.ToString();
+            test_Result.text = e.ToString(); 
         }
 
         dbCommand.Dispose();
