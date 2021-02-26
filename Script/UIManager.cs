@@ -64,17 +64,17 @@ public class UIManager : MonoBehaviour
         SoundManager.Instance.Gameover();
         int score = GameManager.Instance.count * 10;
         string playtime = GameManager.Instance.time.ToString("N2") + "초";
-        float playtime_REAL = (float)(Math.Truncate(GameManager.Instance.time*100)/100); // 소수점 2째자리까지 나타내주는 코드
+        float playtime_REAL = (float)(Math.Truncate(GameManager.Instance.time*100)/100); // 소수점 2째자리까지 나타내주는 코드 - 이하 버림
         GameManager.Instance.RESULT_score.text = "점수 : " + score.ToString();
         GameManager.Instance.RESULT_time.text = "게임시간 : " + playtime;
-        
-        string sql = string.Format("Insert into Game(userID, gameID, gamePlayTime, gameScore) " +
-                                                    "VALUES( {0}, {1}, {2}, {3} )", 
-                                                    sqlite.Instance.userID, sqlite.Instance.gameID, playtime_REAL, score);
-        sqlite.Instance.test.text = sql;
-        sqlite.Instance.DatabaseSQLAdd(sql);
-
         ResultPanel.SetActive(true);
+
+        // 디비 연동 코드
+        string sql = string.Format("Insert into Game(date, userID, gameID, gamePlayTime, gameScore) " +
+                                                    "VALUES( {0}, {1}, {2}, {3}, {4})",
+                                                    sqlite.Instance.date, sqlite.Instance.userID, sqlite.Instance.gameID, playtime_REAL, score);
+        Debug.Log("sqlite.Instance.date : " + sqlite.Instance.date);
+        sqlite.Instance.DatabaseSQLAdd(sql);
     }
 
     public void Menu() // 일시정지 버튼을 눌렀을때

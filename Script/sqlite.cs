@@ -15,8 +15,10 @@ using SqliteConnection = Mono.Data.Sqlite.SqliteConnection;
 public class sqlite : MonoBehaviour
 {
     public Text MaxScore_Text; // 최고점수
-    public Text test;          // 디버깅용
+    public Text test;          // 디버깅용 - 게임씬 - 화면 상단에 text오브젝트 두고 상태나 오류확인
+    public Text test_Result;   // 빌드시 디버깅용 - 게임씬 - 결과패널에 GAMEOVER 텍스트 오브젝트 유니티에서 넣기 - 상태나 오류 확인
     public int maxScore;
+    public string date;
     public string userID;
     public string gameID; 
 
@@ -29,9 +31,15 @@ public class sqlite : MonoBehaviour
 
     private void Awake()
     {
-        userID = "\"유저아이디4\""; // 나중에 로그인시 Column 클래스 만들어서 그때 객체화하기
-        gameID = "\"21arrow\"";
         _Instance = this;
+        
+        // 오늘날짜 + 현재시간
+        date = DateTime.Now.ToString("yyyy년 MM월 dd일 HH시 mm분 ss초");
+        date = string.Format("\"{0}\"", date);
+
+        Debug.Log ("date : " + date);
+        userID = "\"유저아이디4\""; // 나중에 로그인 구현시 Column 클래스로 만들어서 그때 객체화하기
+        gameID = "\"21arrow\"";     // 각자 게임 이름에 맞게 변경
         maxScore = 0;
         //StartCoroutine(DBCreate());
     }
@@ -120,13 +128,17 @@ public class sqlite : MonoBehaviour
         dbCommand.CommandText = query;  // 쿼리 입력
         try
         {
-            dbCommand.ExecuteNonQuery();    // 쿼리 실행 - 여기서 안됌 - 안되는 게 아니고 처음에 오래걸리는 거임
+            dbCommand.ExecuteNonQuery();    // 쿼리 실행
         }
 
         catch (Exception e)
         {
-            Debug.Log(e);
+            Debug.LogError(e);
             test.text = e.ToString();
+
+            // 빌드시 에러확인을 위해 넣음 결과패널에 Game Over대신 에러 나오게 하는 코드
+            test_Result.GetComponent<Text>().fontSize = 30; // 폰트 사이즈 작게 변경 - 이유 : 오류가 길어서
+            test_Result.text = e.ToString();
         }
 
         dbCommand.Dispose();
@@ -147,8 +159,8 @@ public class sqlite : MonoBehaviour
         
         while (dataReader.Read())                            // 쿼리로 돌아온 레코드 읽기
         {
-            Debug.Log(dataReader.GetInt32(4));               // 4번 점수 필드 읽기
-            int score = dataReader.GetInt32(4);
+            Debug.Log(dataReader.GetInt32(5));               // 5번 점수 필드 읽기
+            int score = dataReader.GetInt32(5);
             
             // score를 기준으로 내림차순 정렬후 제일 첫 레코드의 값을 가져오면 데이터가 많을 때 좋은 효율을 보일 듯?
             if (score > maxScore)
@@ -167,3 +179,4 @@ public class sqlite : MonoBehaviour
         dbConnection = null;
     }
 }
+
