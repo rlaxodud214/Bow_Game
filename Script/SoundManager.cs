@@ -54,13 +54,11 @@ public class SoundManager : MonoBehaviour
     {
         myAudio1 = GetComponents<AudioSource>()[0];  // 오디오 소스(SoundManager 오브젝트)를 가져와 myAudio에 저장
 
-        // backvol1 = PlayerPrefs.GetFloat("backvol1", 0.5f);
-        backvol1 = sqlite.Instance.musicSound;
+        backvol1 = PlayerPrefs.GetFloat("backvol1", 0.5f);
         backVSlider1.value = backvol1;
         myAudio1.volume = backVSlider1.value;
 
-        // backvol2 = PlayerPrefs.GetFloat("backvol2", 0.5f);
-        backvol2 = sqlite.Instance.effectSound;
+        backvol2 = PlayerPrefs.GetFloat("backvol2", 0.5f);
         backVSlider2.value = backvol2;
         myAudio2.volume = backVSlider2.value;
     }
