@@ -54,15 +54,17 @@ public class SoundManager : MonoBehaviour
     {
         myAudio1 = GetComponents<AudioSource>()[0];  // 오디오 소스(SoundManager 오브젝트)를 가져와 myAudio에 저장
 
-        backvol1 = PlayerPrefs.GetFloat("backvol1", 0.5f);
+        // backvol1 = PlayerPrefs.GetFloat("backvol1", 0.5f);
+        backvol1 = sqlite.Instance.musicSound;
         backVSlider1.value = backvol1;
         myAudio1.volume = backVSlider1.value;
 
-        backvol2 = PlayerPrefs.GetFloat("backvol2", 0.5f);
+        // backvol2 = PlayerPrefs.GetFloat("backvol2", 0.5f);
+        backvol2 = sqlite.Instance.effectSound;
         backVSlider2.value = backvol2;
-
-        // for (int i = 0; i < myAudio2.Length; i++) { myAudio2[i].volume = backVSlider2.value; }
+        myAudio2.volume = backVSlider2.value;
     }
+
     private void Update()
     {
         if(!clear)
@@ -147,7 +149,6 @@ public class SoundManager : MonoBehaviour
     {
         // 배경음이랑 물려서 수정
         myAudio1.volume = 0f;
-        backVSlider1.value = 0f;
         clear = true;
         myAudio2.PlayOneShot(GameOver); // 오디오 소스로 소리를 한 번 재생시킴
     }

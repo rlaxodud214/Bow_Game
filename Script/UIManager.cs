@@ -70,10 +70,13 @@ public class UIManager : MonoBehaviour
         ResultPanel.SetActive(true);
 
         // 디비 연동 코드
-        string sql = string.Format("Insert into Game(date, userID, gameID, gamePlayTime, gameScore) " +
-                                                    "VALUES( {0}, {1}, {2}, {3}, {4})",
-                                                    sqlite.Instance.date, sqlite.Instance.userID, sqlite.Instance.gameID, playtime_REAL, score);
-        Debug.Log("sqlite.Instance.date : " + sqlite.Instance.date);
+        string sql = string.Format("Insert into Game(date, userID, gameID, gamePlayTime, gameScore, musicSound, effectSound)" +
+         "VALUES( {0}, {1}, {2}, {3}, {4}, {5}, {6})", sqlite.Instance.date, sqlite.Instance.userID, sqlite.Instance.gameID, 
+          playtime_REAL, score, SoundManager.Instance.backVSlider1.value, SoundManager.Instance.backVSlider2.value);
+
+        Debug.Log("music : " + SoundManager.Instance.backVSlider1.value);
+        Debug.Log("effect : " + SoundManager.Instance.backVSlider2.value);
+        SoundManager.Instance.backVSlider1.value = 0f;
         sqlite.Instance.DatabaseSQLAdd(sql);
     }
 

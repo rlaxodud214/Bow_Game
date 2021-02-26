@@ -126,7 +126,7 @@ public class GameManager : MonoBehaviour
     {
         nextTime_Arrow += Timeplus_Arrow; // 제일 처음 화살과 겹쳐서 1초 이후에 부터 1초마다 생성시키기 위함
         // slider = GetComponent<Slider>();
-        Debug.Log("Arrow_Spawn : " + Arrow_Spawn);
+        // Debug.Log("Arrow_Spawn : " + Arrow_Spawn);
         ArrowPos = Arrow.gameObject.transform.position; // 화살의 현재 위치를 받아온다.
         if (isTuto) { ArrowPos.z = 95f; }
     }

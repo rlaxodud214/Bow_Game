@@ -17,11 +17,14 @@ public class sqlite : MonoBehaviour
     public Text MaxScore_Text; // 최고점수
     public Text test;          // 디버깅용 - 게임씬 - 화면 상단에 text오브젝트 두고 상태나 오류확인
     public Text test_Result;   // 빌드시 디버깅용 - 게임씬 - 결과패널에 GAMEOVER 텍스트 오브젝트 유니티에서 넣기 - 상태나 오류 확인
+
     public int maxScore;
     public string date;
     public string userID;
-    public string gameID; 
-
+    public string gameID;
+    public float musicSound;
+    public float effectSound;
+    private string sql;
     private static sqlite _Instance;             // 싱글톤 객체 선언, 어디에서든지 접근할 수 있도록 하기위해 
 
     public static sqlite Instance                // 객체에 접근하기 위한 속성으로 내부에 get set을 사용한다.
@@ -41,6 +44,10 @@ public class sqlite : MonoBehaviour
         userID = "\"유저아이디4\""; // 나중에 로그인 구현시 Column 클래스로 만들어서 그때 객체화하기
         gameID = "\"21arrow\"";     // 각자 게임 이름에 맞게 변경
         maxScore = 0;
+
+        DbConnectionCHek();
+        sql = string.Format("SELECT * FROM Game Where userID = {0} ORDER BY rowid DESC limit 1", userID); // 제일 마지막 레코드 가져오기
+        DataBaseRead(sql, true);
         //StartCoroutine(DBCreate());
     }
 
@@ -75,8 +82,7 @@ public class sqlite : MonoBehaviour
     void Start()
     {
         DbConnectionCHek();
-        string sql = string.Format("SELECT * FROM Game Where userID = {0}", userID);
-        DataBaseRead(sql);
+        DataBaseRead(sql, false);
         //Select * From test Where testID = "hi" : 사용 예시
     }
 
@@ -149,27 +155,45 @@ public class sqlite : MonoBehaviour
         test.text = "결과 데이터 삽입 완료";
     }
 
-    public void DataBaseRead(String query) //DB 읽어오기 - 인자로 쿼리문을 받는다.
+    public void DataBaseRead(String query, bool volume) //DB 읽어오기 - 인자로 쿼리문을 받는다.
     {
         IDbConnection dbConnection = new SqliteConnection(GetDBFilePath());
         dbConnection.Open();           // DB 열기
         IDbCommand dbCommand = dbConnection.CreateCommand();
         dbCommand.CommandText= query;  // 쿼리 입력
         IDataReader dataReader = dbCommand.ExecuteReader(); // 쿼리 실행
-        
-        while (dataReader.Read())                            // 쿼리로 돌아온 레코드 읽기
-        {
-            Debug.Log(dataReader.GetInt32(5));               // 5번 점수 필드 읽기
-            int score = dataReader.GetInt32(5);
-            
-            // score를 기준으로 내림차순 정렬후 제일 첫 레코드의 값을 가져오면 데이터가 많을 때 좋은 효율을 보일 듯?
-            if (score > maxScore)
-                maxScore = score;
-            
-            MaxScore_Text.text = "최고점수 : " + maxScore;
-        }
 
-        
+        if (volume)
+        {
+            while (dataReader.Read())                            // 쿼리로 돌아온 레코드 읽기
+            {
+                try
+                {
+                    musicSound = (float)dataReader.GetDouble(6);
+                    effectSound = (float)dataReader.GetDouble(7);
+                }
+                catch (Exception e) // 게임 제일 처음 시작해서 DB에 sound값이 없을 때 오류남
+                {
+                    Debug.Log(e);
+                    musicSound = 0.1f;
+                    effectSound = 0.1f;
+                }
+            }
+        }
+        else
+        {
+            while (dataReader.Read())                            // 쿼리로 돌아온 레코드 읽기
+            {
+                int score = dataReader.GetInt32(5);
+
+                // score를 기준으로 내림차순 정렬후 제일 첫 레코드의 값을 가져오면 데이터가 많을 때 좋은 효율을 보일 듯?
+                if (score > maxScore)
+                    maxScore = score;
+
+                MaxScore_Text.text = "최고점수 : " + maxScore;
+            }
+        }
+                
         dataReader.Dispose();  // 생성순서와 반대로 닫아줍니다.
         dataReader = null;
         dbCommand.Dispose();
@@ -179,4 +203,3 @@ public class sqlite : MonoBehaviour
         dbConnection = null;
     }
 }
-
