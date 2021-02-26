@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
@@ -61,8 +62,18 @@ public class UIManager : MonoBehaviour
         Time.timeScale = 0f;
         // 캔버스의 서브카메라가 결과 패널을 가려서 false 시킴
         SoundManager.Instance.Gameover();
-        GameManager.Instance.RESULT_score.text = "점수 : " + (GameManager.Instance.count * 10).ToString();
-        GameManager.Instance.RESULT_time.text = "게임시간 : " + GameManager.Instance.time.ToString("N2") + "초";
+        int score = GameManager.Instance.count * 10;
+        string playtime = GameManager.Instance.time.ToString("N2") + "초";
+        float playtime_REAL = (float)(Math.Truncate(GameManager.Instance.time*100)/100); // 소수점 2째자리까지 나타내주는 코드
+        GameManager.Instance.RESULT_score.text = "점수 : " + score.ToString();
+        GameManager.Instance.RESULT_time.text = "게임시간 : " + playtime;
+        
+        string sql = string.Format("Insert into Game(userID, gameID, gamePlayTime, gameScore) " +
+                                                    "VALUES( {0}, {1}, {2}, {3} )", 
+                                                    sqlite.Instance.userID, sqlite.Instance.gameID, playtime_REAL, score);
+        sqlite.Instance.test.text = sql;
+        sqlite.Instance.DatabaseSQLAdd(sql);
+
         ResultPanel.SetActive(true);
     }
 
