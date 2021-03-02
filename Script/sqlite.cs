@@ -79,12 +79,8 @@ public class sqlite : MonoBehaviour
     void Start()
     {
         DbConnectionCHek();
-        //sql = string.Format("Insert into Game(date, userID, gameID, gamePlayTime, gameScore) " +
-        //      "VALUES( {0}, {1}, {2}, {3}, {4})", sqlite.Instance.date, sqlite.Instance.userID, sqlite.Instance.gameID, 0, 0);
-        //DatabaseSQLAdd(sql);  // 디비 비어있을 때 기본 레코드 추가하는 코드
-        sql = string.Format("SELECT * FROM Game Where userID = {0}", userID);
-        DataBaseRead(sql);
-        //Select * From test Where testID = "hi" : 사용 예시
+        // gameScore를 기준으로 내림차순 정렬후 제일 첫 레코드의 값을 가져오기
+        DataBaseRead( string.Format("SELECT gameScore FROM Game WHERE userID = {0} ORDER BY gameScore DESC ", userID) );
     }
 
     public void DbConnectionCHek() //연결상태 확인
@@ -166,14 +162,10 @@ public class sqlite : MonoBehaviour
         
         while (dataReader.Read())                            // 쿼리로 돌아온 레코드 읽기
         {
-            // Debug.Log(dataReader.GetInt32(5));               // 5번 점수 필드 읽기
-            int score = dataReader.GetInt32(5);
-            
-            // score를 기준으로 내림차순 정렬후 제일 첫 레코드의 값을 가져오면 데이터가 많을 때 좋은 효율을 보일 듯?
-            if (score > maxScore)
-                maxScore = score;
-            
+            Debug.Log(dataReader.GetInt32(0));               // 5번 점수 필드 읽기
+            int maxScore = dataReader.GetInt32(0);
             MaxScore_Text.text = "최고점수 : " + maxScore;
+            break; // 내림차순 정렬이므로 처음에 한 번만 레코드값을 가져오면 된다.
         }
 
         dataReader.Dispose();  // 생성순서와 반대로 닫아줍니다.

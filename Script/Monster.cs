@@ -60,27 +60,5 @@ public class Monster : MonoBehaviour
             UIManager.Instance.ui();
             Destroy(gameObject);
         }
-
-        //if (collision.gameObject.tag == "Arrow")
-        //{
-        //    if (!GameManager.Instance.isTuto) // 튜토리얼에서 몬스터 생성후 안내중 화살에 제거되는 거 방지 
-        //    {
-        //        GameManager.Instance.countPlus();
-        //        SoundManager.Instance.Monster_die();
-        //        check = true;
-        //        Destroy(collision.gameObject);
-        //        Start();
-        //    }
-        //}
     }
-
-    //public IEnumerator Damage()
-    //{
-    //    if(check)
-    //    {
-    //        this.GetComponent<Animator>().SetTrigger("damage");
-    //        yield return new WaitForSeconds(0.2f);
-    //        Destroy(gameObject);
-    //    }
-    //}
 }
