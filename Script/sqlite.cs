@@ -80,7 +80,8 @@ public class sqlite : MonoBehaviour
     {
         DbConnectionCHek();
         // gameScore를 기준으로 내림차순 정렬후 제일 첫 레코드의 값을 가져오기
-        DataBaseRead( string.Format("SELECT gameScore FROM Game WHERE userID = {0} ORDER BY gameScore DESC ", userID) );
+        DataBaseRead( string.Format("SELECT * FROM Game WHERE userID = {0} ORDER BY gameScore DESC ", userID) );
+        // DataBaseRead( string.Format("SELECT gameScore FROM Game WHERE userID = {0} ORDER BY gameScore DESC ", userID) );
     }
 
     public void DbConnectionCHek() //연결상태 확인
@@ -162,8 +163,8 @@ public class sqlite : MonoBehaviour
         
         while (dataReader.Read())                            // 쿼리로 돌아온 레코드 읽기
         {
-            Debug.Log(dataReader.GetInt32(0));               // 5번 점수 필드 읽기
-            int maxScore = dataReader.GetInt32(0);
+            Debug.Log(dataReader.GetInt32(5));               // 5번 점수 필드 읽기
+            int maxScore = dataReader.GetInt32(5);
             MaxScore_Text.text = "최고점수 : " + maxScore;
             break; // 내림차순 정렬이므로 처음에 한 번만 레코드값을 가져오면 된다.
         }
