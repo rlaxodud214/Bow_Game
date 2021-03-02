@@ -30,6 +30,34 @@ public class sqlite : MonoBehaviour
         get { return _Instance; }                     // GameManager 객체 리턴
     }
 
+    IEnumerator DBCreate() //DB 생성하는 코드인데 우리는 굳이 사용할 필요 없음, 알아만 두세연
+                           // IEnumerator 쓴 이유는 가장 빠르게 생성되기 때문
+                           // 실행하면 에셋 파일 안에 생성됨, db만 생성되기 때문에 테이블은 따로 만들어줘야 함
+    {
+        string filepath = string.Empty;
+        if (Application.platform == RuntimePlatform.Android)
+        {
+            filepath = Application.persistentDataPath + "/test1.db"; //생성될 파일 경로와 db 이름
+            if (!File.Exists(filepath))
+            {
+                UnityWebRequest unityWebRequest = UnityWebRequest.Get("jar:file://" + Application.dataPath + "!/assets/test1.db"); //생성하고 싶은 경로와 db 이름
+                unityWebRequest.downloadedBytes.ToString();
+                yield return unityWebRequest.SendWebRequest().isDone;
+                File.WriteAllBytes(filepath, unityWebRequest.downloadHandler.data);
+            }
+        }
+        else
+        {
+            filepath = Application.dataPath + "/test1.db";
+            if (!File.Exists(filepath))
+            {
+                File.Copy(Application.streamingAssetsPath + "/test1.db", filepath);
+            }
+        }
+        Debug.Log("db생성 완료");
+        test.text = "db생성 완료";
+    }
+
     private void Awake()
     {
         _Instance = this;
@@ -42,44 +70,18 @@ public class sqlite : MonoBehaviour
         userID = "\"유저아이디4\""; // 나중에 로그인 구현시 Column 클래스로 만들어서 그때 객체화하기
         gameID = "\"21arrow\"";     // 각자 게임 이름에 맞게 변경
         maxScore = 0;
+        MaxScore_Text.text = "최고점수 : " + maxScore;
         //StartCoroutine(DBCreate());
     }
 
-    IEnumerator DBCreate() //DB 생성하는 코드인데 우리는 굳이 사용할 필요 없음, 알아만 두세연
-                           // IEnumerator 쓴 이유는 가장 빠르게 생성되기 때문
-                           // 실행하면 에셋 파일 안에 생성됨, db만 생성되기 때문에 테이블은 따로 만들어줘야 함
-    {
-        string filepath = string.Empty;
-        if(Application.platform==RuntimePlatform.Android)
-        {
-            filepath = Application.persistentDataPath + "/test1.db"; //생성될 파일 경로와 db 이름
-            if(!File.Exists(filepath))
-            {
-                UnityWebRequest unityWebRequest = UnityWebRequest.Get("jar:file://" + Application.dataPath + "!/assets/test1.db"); //생성하고 싶은 경로와 db 이름
-                unityWebRequest.downloadedBytes.ToString();
-                yield return unityWebRequest.SendWebRequest().isDone;
-                File.WriteAllBytes(filepath, unityWebRequest.downloadHandler.data);
-            }
-        }
-        else
-        {
-            filepath = Application.dataPath + "/test1.db";
-            if(!File.Exists(filepath))
-            {
-                File.Copy(Application.streamingAssetsPath + "/test1.db", filepath);
-            }
-        }
-        Debug.Log("db생성 완료");
-        test.text = "db생성 완료";
-    }
+
 
     void Start()
     {
         DbConnectionCHek();
-        sql = string.Format("Insert into Game(date, userID, gameID, gamePlayTime, gameScore) " +
-              "VALUES( {0}, {1}, {2}, {3}, {4})", sqlite.Instance.date, sqlite.Instance.userID, sqlite.Instance.gameID, 0, 0);
-        sqlite.Instance.DatabaseSQLAdd(sql); // 디비 비어있을 때 기본 레코드 추가하는 코드
-        DatabaseSQLAdd(sql);
+        //sql = string.Format("Insert into Game(date, userID, gameID, gamePlayTime, gameScore) " +
+        //      "VALUES( {0}, {1}, {2}, {3}, {4})", sqlite.Instance.date, sqlite.Instance.userID, sqlite.Instance.gameID, 0, 0);
+        //DatabaseSQLAdd(sql);  // 디비 비어있을 때 기본 레코드 추가하는 코드
         sql = string.Format("SELECT * FROM Game Where userID = {0}", userID);
         DataBaseRead(sql);
         //Select * From test Where testID = "hi" : 사용 예시
@@ -174,7 +176,6 @@ public class sqlite : MonoBehaviour
             MaxScore_Text.text = "최고점수 : " + maxScore;
         }
 
-        
         dataReader.Dispose();  // 생성순서와 반대로 닫아줍니다.
         dataReader = null;
         dbCommand.Dispose();
