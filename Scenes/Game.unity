@@ -2410,6 +2410,7 @@ MonoBehaviour:
   date: 
   userID: 
   gameID: 
+  sql: 
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -9471,7 +9472,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uCD5C\uACE0\uC810\uC218 : "
+  m_Text: "\uCD5C\uACE0\uC810\uC218 : 0"
 --- !u!224 &6789910897454983854
 RectTransform:
   m_ObjectHideFlags: 0

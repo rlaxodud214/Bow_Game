@@ -64,17 +64,19 @@ public class sqlite : MonoBehaviour
         
         // 오늘날짜 + 현재시간
         date = DateTime.Now.ToString("yyyy년 MM월 dd일 HH시 mm분 ss초");
-        date = string.Format("\"{0}\"", date);
+        date = SqlFormat(date);
 
-        Debug.Log ("date : " + date);
-        userID = "\"유저아이디4\""; // 나중에 로그인 구현시 Column 클래스로 만들어서 그때 객체화하기
-        gameID = "\"21arrow\"";     // 각자 게임 이름에 맞게 변경
+        userID = SqlFormat("유저아이디2"); // 나중에 로그인 구현시 Column 클래스로 만들어서 그때 객체화하기
+        gameID = SqlFormat("21arrow");     // 각자 게임 이름에 맞게 변경
         maxScore = 0;
         MaxScore_Text.text = "최고점수 : " + maxScore;
         //StartCoroutine(DBCreate());
     }
 
-
+    public string SqlFormat(string sql)
+    {
+        return string.Format("\"{0}\"", sql);
+    }
 
     void Start()
     {
