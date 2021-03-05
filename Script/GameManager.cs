@@ -65,6 +65,8 @@ public class GameManager : MonoBehaviour
     public float[] Arrow_Spawn;    // 실제
 
     public bool isTuto;
+    public float SliderMinValue;
+    public float SliderMaxValue;
 
     List<List<int>> Row = new List<List<int>>() {  new List<int> { 0, 0 }, new List<int> { 0, 0 },
                                  new List<int> { 0, 0 }, new List<int> { 2, 5 },   // 3라인
@@ -118,6 +120,9 @@ public class GameManager : MonoBehaviour
         STAGE_stage.text = "1";
         //stage&life 변수 초기화
         life = 3;
+
+        SliderMinValue = 90;
+        SliderMaxValue = 90;
     }
     #endregion
 
@@ -137,7 +142,21 @@ public class GameManager : MonoBehaviour
             time += Time.deltaTime;
         Create_Object(); //1234
         ChangeColorAndRotation();
+        Slider_MinMax_Value();
     }
+
+    public void Slider_MinMax_Value()
+    {
+        if (slider.value < SliderMinValue)
+        {
+            SliderMinValue = slider.value;
+        }
+        if (slider.value > SliderMaxValue)
+        {
+            SliderMaxValue = slider.value;
+        }
+    }
+
     public void ChangeColorAndRotation()
     {
         // Debug.Log("bullet.Instance.slider_value/10 : " + bullet.Instance.slider_value / 10);

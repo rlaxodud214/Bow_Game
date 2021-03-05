@@ -11,6 +11,7 @@ public class UIManager : MonoBehaviour
     public Text Monster_Spawn_Slot_Up;
     public bool pause = false; // 일시정지시 몬스터 움직임을 없애기 위해서 선언
     public bool check = false;
+    public GameObject origin;
 
     // 싱글톤 패턴
     #region Singleton
@@ -56,9 +57,15 @@ public class UIManager : MonoBehaviour
             GameOver();                  // 생명이 없으므로 게임 오버메소드 호출
         }
     }
-
+    
     public void GameOver() //게임오버+결과화면 함수
     {
+        float num1 = (float)((GameManager.Instance.SliderMaxValue - GameManager.Instance.SliderMinValue) * ((Double)1 / (Double)140));
+        origin.transform.GetComponent<Image>().fillAmount = num1;
+
+        float Rotate = (float)((90 - GameManager.Instance.SliderMinValue) * ((Double)18 / (Double)7));
+        origin.transform.rotation = Quaternion.Euler(0, 0, Mathf.Abs(Rotate)); // Mathf.Abs : 절대값
+
         Time.timeScale = 0f;
         // 캔버스의 서브카메라가 결과 패널을 가려서 false 시킴
         SoundManager.Instance.Gameover();
@@ -70,8 +77,8 @@ public class UIManager : MonoBehaviour
         ResultPanel.SetActive(true);
 
         // 디비 연동 코드
-        string sql = string.Format("Insert into Game(date, userID, gameID, gamePlayTime, gameScore) " +
-        "VALUES( {0}, {1}, {2}, {3}, {4})", sqlite.Instance.date, sqlite.Instance.userID, sqlite.Instance.gameID, playtime_REAL, score);
+        string sql = string.Format("Insert into Game(date, userID, gameID, angleOfRotation, gamePlayTime, gameScore) " +
+        "VALUES( {0}, {1}, {2}, {3}, {4}, {5} )", sqlite.Instance.date, sqlite.Instance.userID, sqlite.Instance.gameID, num1*360, playtime_REAL, score);
         sqlite.Instance.DatabaseSQLAdd(sql);
     }
 
@@ -118,4 +125,3 @@ public class UIManager : MonoBehaviour
         StagePanel.SetActive(false);
     }
 }
-

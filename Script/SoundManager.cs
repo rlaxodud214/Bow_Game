@@ -38,7 +38,6 @@ public class SoundManager : MonoBehaviour
     // 인스턴스 변수 초기화
     void Awake()
     {
-        // myAudio2 = new AudioSource[5];
         // 인스턴스가 생성되지 않았을 때 (인스턴스 중복 생성을 막기 위함)
         if (SoundManager.Instance == null)
         {
