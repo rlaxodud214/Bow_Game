@@ -14,7 +14,7 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     #region 변수
-
+    public MonsterType monsterType;
     public GameObject[] Life = new GameObject[4];     // 남은 목숨을 저장할 배열
     public int life;                                  // 남은 목숨, 하트 갯수
     public int count = 0;
@@ -278,4 +278,10 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+
+    public enum MonsterType
+    {
+        normal
+    }
+
 }
