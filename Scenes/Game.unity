@@ -1438,7 +1438,7 @@ GameObject:
   - component: {fileID: 368601306}
   - component: {fileID: 368601305}
   m_Layer: 5
-  m_Name: "GamOver()\uD638\uCD9C"
+  m_Name: "GameOver()\uD638\uCD9C"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4555,6 +4555,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 205a85048037afe489fad8f7046ac803, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  monsterType: 0
   Life:
   - {fileID: 1002487835}
   - {fileID: 1402915549}
@@ -4570,7 +4571,7 @@ MonoBehaviour:
   Count: {fileID: 1511018481}
   time: 0
   nextTime_Arrow: 0
-  Timeplus_Arrow: 0.8
+  Timeplus_Arrow: 0
   Arrow_Prefabs: {fileID: 3040984628087974057, guid: dac55dd73a131f3488ec8b0df48bf74b,
     type: 3}
   Arrow: {fileID: 1871022280}
