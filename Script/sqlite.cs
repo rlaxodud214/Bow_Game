@@ -22,6 +22,8 @@ public class sqlite : MonoBehaviour
     public string userID;
     public string gameID; 
     public string sql;
+    public Dictionary<string, float> Dic = new Dictionary<string, float>(10);
+    public List<string> series1Data2;
 
     private static sqlite _Instance;             // 싱글톤 객체 선언, 어디에서든지 접근할 수 있도록 하기위해 
 
@@ -82,8 +84,8 @@ public class sqlite : MonoBehaviour
     {
         DbConnectionCHek();
         // gameScore를 기준으로 내림차순 정렬후 제일 첫 레코드의 값을 가져오기
-        DataBaseRead( string.Format("SELECT * FROM Game WHERE userID = {0} ORDER BY gameScore DESC ", userID) );
-        // DataBaseRead( string.Format("SELECT gameScore FROM Game WHERE userID = {0} ORDER BY gameScore DESC ", userID) );
+        DataBaseRead(string.Format("SELECT * FROM Game WHERE userID = {0} ORDER BY gameScore DESC ", userID) );
+        DataBaseRead_Chart(string.Format("SELECT * FROM Game WHERE userID = {0}", userID));
     }
 
     public void DbConnectionCHek() //연결상태 확인
@@ -178,5 +180,55 @@ public class sqlite : MonoBehaviour
         // DB에는 1개의 쓰레드만이 접근할 수 있고 동시에 접근시 에러가 발생한다. 그래서 Open과 Close는 같이 써야한다.
         dbConnection.Close();  
         dbConnection = null;
+    }
+
+    public void DataBaseRead_Chart(String query) //DB 읽어오기 - 인자로 쿼리문을 받는다.
+    {
+        IDbConnection dbConnection = new SqliteConnection(GetDBFilePath());
+        dbConnection.Open();           // DB 열기
+        IDbCommand dbCommand = dbConnection.CreateCommand();
+        dbCommand.CommandText = query;  // 쿼리 입력
+        IDataReader dataReader = dbCommand.ExecuteReader(); // 쿼리 실행
+
+        while (dataReader.Read())                            // 쿼리로 돌아온 레코드 읽기
+        {
+            string date = dataReader.GetString(0).Substring(0, 13);
+            float maxRotation = (float)dataReader.GetDouble(3);
+            
+
+            if(Dic.Keys.Count == 0)
+                Dic.Add(date, maxRotation);
+
+            if (Dic.ContainsKey(date).Equals(true)) { // date값이 이미 키값으로 들어가있다면 Add 하지 않고 뒤에 벨류값만 비교함.
+                if (Dic[date] < maxRotation) { Dic[date] = maxRotation; }
+            }
+            else
+            {
+                Dic.Add(date, maxRotation);
+            }
+
+            Debug.Log("date : " + date + ", Dic[date] : " + Dic[date]);
+        }
+
+        dataReader.Dispose();  // 생성순서와 반대로 닫아줍니다.
+        dataReader = null;
+        dbCommand.Dispose();
+        dbCommand = null;
+        // DB에는 1개의 쓰레드만이 접근할 수 있고 동시에 접근시 에러가 발생한다. 그래서 Open과 Close는 같이 써야한다.
+        dbConnection.Close();
+        dbConnection = null;
+
+        // 디비 확인 코드
+        foreach (KeyValuePair<string, float> item in Dic)
+        {
+            Debug.Log(item.Key + " : " + item.Value);
+            if(item.Value != 0)
+            {
+                if (item.Key.Substring(10, 1) == "0")
+                    series1Data2.Add(item.Key.Substring(7, 1) + "/" + item.Key.Substring(11, 1) + ", " + item.Value.ToString("N0"));
+                else
+                    series1Data2.Add(item.Key.Substring(7, 1) + "/" + item.Key.Substring(10, 2) + ", " + item.Value.ToString("N0"));
+            }
+        }
     }
 }

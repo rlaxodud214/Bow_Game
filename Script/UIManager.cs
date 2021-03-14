@@ -78,7 +78,7 @@ public class UIManager : MonoBehaviour
 
         // 디비 연동 코드
         string sql = string.Format("Insert into Game(date, userID, gameID, angleOfRotation, gamePlayTime, gameScore) " +
-        "VALUES( {0}, {1}, {2}, {3}, {4}, {5} )", sqlite.Instance.date, sqlite.Instance.userID, sqlite.Instance.gameID, num1*360, playtime_REAL, score);
+        "VALUES( {0}, {1}, {2}, {3}, {4}, {5} )", sqlite.Instance.date, sqlite.Instance.userID, sqlite.Instance.gameID, num1*180, playtime_REAL, score);
         sqlite.Instance.DatabaseSQLAdd(sql);
     }
 
@@ -124,4 +124,6 @@ public class UIManager : MonoBehaviour
         
         StagePanel.SetActive(false);
     }
+
+ 
 }
