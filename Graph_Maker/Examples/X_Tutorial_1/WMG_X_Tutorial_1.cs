@@ -29,13 +29,17 @@ public class WMG_X_Tutorial_1 : MonoBehaviour {
 	void Awake()
 	{
 		_Instance = GetComponent<WMG_X_Tutorial_1>();  // _uiManager에 UIManager의 컴포넌트(자기 자신)에 대한 참조를 얻음
+		Debug.Log("graphGO.gameObject.name : " + graphGO.gameObject.name);
+		if(graphGO.gameObject.name != "EmptyGraph 1(Clone)")
+			graphGO = GameObject.Instantiate(emptyGraphPrefab);
+		graphGO.transform.SetParent(this.transform, false);
 		Show_Garph_Check = false;
 	}
 	#endregion
 
 	// Use this for initialization
 	void Start () {
-		if (Show_Garph_Check)
+		if (!Show_Garph_Check)
 			return;
 		series1Data2 = sqlite.Instance.series1Data2;
 		Debug.Log("sqlite.Instance.series1Data2.Count : " + sqlite.Instance.series1Data2.Count);
@@ -43,8 +47,7 @@ public class WMG_X_Tutorial_1 : MonoBehaviour {
         {
 			Debug.Log("sqlite.Instance.series1Data2[i] : " + sqlite.Instance.series1Data2[i]);
 		}
-		graphGO = GameObject.Instantiate(emptyGraphPrefab);
-		graphGO.transform.SetParent(this.transform, false);
+		
 		graphGO.transform.localScale = graphGO.transform.localScale * 2.5f;
 		GameObject BackGround0 = graphGO.gameObject.transform.GetChild(0).transform.GetChild(0).gameObject;
 		GameObject BackGround1 = graphGO.gameObject.transform.GetChild(0).transform.GetChild(1).gameObject;
