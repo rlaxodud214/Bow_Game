@@ -50,11 +50,16 @@ public class WMG_X_Tutorial_1 : MonoBehaviour
 		graphGO.transform.localScale = graphGO.transform.localScale * 2.5f;
 		GameObject BackGround0 = graphGO.gameObject.transform.GetChild(0).transform.GetChild(0).gameObject;
 		GameObject BackGround1 = graphGO.gameObject.transform.GetChild(0).transform.GetChild(1).gameObject;
-		BackGround0.transform.localScale = BackGround0.transform.localScale * 1.3f;
+		BackGround0.transform.localScale = BackGround0.transform.localScale * 1.1f;
 
-		Debug.Log("1. BackGround1.GetComponent<Transform>().position : " + BackGround1.GetComponent<Transform>().position.x);
-		BackGround1.GetComponent<Transform>().position = BackGround1.GetComponent<Transform>().position + new Vector3(-16.5f, -10f, 0);
-		Debug.Log("2. BackGround1.GetComponent<Transform>().position : " + BackGround1.GetComponent<Transform>().position.x);
+		Debug.Log("BackGround0's name : " + BackGround0.name);
+		Debug.Log("BackGround1's name : " + BackGround1.name);
+
+		BackGround0.GetComponent<Transform>().position = new Vector3(-68f, -46f, 25f);
+		BackGround1.GetComponent<Transform>().localPosition = BackGround1.GetComponent<Transform>().localPosition + new Vector3(0, 42f, 0);
+
+		// Debug.Log("1. BackGround1.GetComponent<Transform>().position : " + BackGround1.GetComponent<Transform>().position.x);
+		// Debug.Log("2. BackGround1.GetComponent<Transform>().position : " + BackGround1.GetComponent<Transform>().position.x);
 
 		graph = graphGO.GetComponent<WMG_Axis_Graph>();
 
