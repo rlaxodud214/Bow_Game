@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class WMG_X_Tutorial_1 : MonoBehaviour {
-	
+public class WMG_X_Tutorial_1 : MonoBehaviour
+{
+
 	// 싱글톤 패턴
 	#region Singleton
 	private static WMG_X_Tutorial_1 _Instance;    // 싱글톤 패턴을 사용하기 위한 인스턴스 변수, static으로 선언하여 어디서든 접근 가능
@@ -29,32 +30,30 @@ public class WMG_X_Tutorial_1 : MonoBehaviour {
 	void Awake()
 	{
 		_Instance = GetComponent<WMG_X_Tutorial_1>();  // _uiManager에 UIManager의 컴포넌트(자기 자신)에 대한 참조를 얻음
-		Debug.Log("graphGO.gameObject.name : " + graphGO.gameObject.name);
-		if(graphGO.gameObject.name != "EmptyGraph 1(Clone)")
-			graphGO = GameObject.Instantiate(emptyGraphPrefab);
-		graphGO.transform.SetParent(this.transform, false);
 		Show_Garph_Check = false;
 	}
 	#endregion
 
 	// Use this for initialization
-	void Start () {
-		if (!Show_Garph_Check)
+	void Start()
+	{
+		if (Show_Garph_Check)
 			return;
 		series1Data2 = sqlite.Instance.series1Data2;
 		Debug.Log("sqlite.Instance.series1Data2.Count : " + sqlite.Instance.series1Data2.Count);
-		for(int i=0; i< sqlite.Instance.series1Data2.Count; i++)
-        {
+		for (int i = 0; i < sqlite.Instance.series1Data2.Count; i++)
+		{
 			Debug.Log("sqlite.Instance.series1Data2[i] : " + sqlite.Instance.series1Data2[i]);
 		}
-		
+		graphGO = GameObject.Instantiate(emptyGraphPrefab);
+		graphGO.transform.SetParent(this.transform, false);
 		graphGO.transform.localScale = graphGO.transform.localScale * 2.5f;
 		GameObject BackGround0 = graphGO.gameObject.transform.GetChild(0).transform.GetChild(0).gameObject;
 		GameObject BackGround1 = graphGO.gameObject.transform.GetChild(0).transform.GetChild(1).gameObject;
-        BackGround0.transform.localScale = BackGround0.transform.localScale * 1.3f;
+		BackGround0.transform.localScale = BackGround0.transform.localScale * 1.3f;
 
-        Debug.Log("1. BackGround1.GetComponent<Transform>().position : " + BackGround1.GetComponent<Transform>().position.x);
-		BackGround1.GetComponent<Transform>().position = BackGround1.GetComponent<Transform>().position + new Vector3(16.5f, -4.5f , 0);
+		Debug.Log("1. BackGround1.GetComponent<Transform>().position : " + BackGround1.GetComponent<Transform>().position.x);
+		BackGround1.GetComponent<Transform>().position = BackGround1.GetComponent<Transform>().position + new Vector3(-16.5f, -10f, 0);
 		Debug.Log("2. BackGround1.GetComponent<Transform>().position : " + BackGround1.GetComponent<Transform>().position.x);
 
 		graph = graphGO.GetComponent<WMG_Axis_Graph>();
@@ -62,15 +61,18 @@ public class WMG_X_Tutorial_1 : MonoBehaviour {
 		series1 = graph.addSeries();
 		graph.xAxis.AxisMaxValue = 5;
 
-		if (useData2) {
+		if (useData2)
+		{
 			List<string> groups = new List<string>();
 			List<Vector2> data = new List<Vector2>();
-			for (int i = 0; i < series1Data2.Count; i++) {
+			for (int i = 0; i < series1Data2.Count; i++)
+			{
 				string[] row = series1Data2[i].Split(',');
 				groups.Add(row[0]);
-				if (!string.IsNullOrEmpty(row[1])) {
+				if (!string.IsNullOrEmpty(row[1]))
+				{
 					float y = float.Parse(row[1]);
-					data.Add(new Vector2(i+1, y));
+					data.Add(new Vector2(i + 1, y));
 				}
 			}
 
@@ -87,7 +89,8 @@ public class WMG_X_Tutorial_1 : MonoBehaviour {
 			series1.lineColor = GameManager.Instance.HexToColor("FFFFFF");
 			series1.pointValues.SetList(data);
 		}
-		else {
+		else
+		{
 			series1.pointValues.SetList(series1Data);
 		}
 		graphGO.SetActive(false);
@@ -96,13 +99,13 @@ public class WMG_X_Tutorial_1 : MonoBehaviour {
 	public void Show_Garph()
 	{
 		if (Show_Garph_Check)
-        {
+		{
 			graphGO.gameObject.SetActive(false);
 			Show_Garph_Check = false;
 		}
 
 		else
-        {
+		{
 			Start();
 			graphGO.gameObject.SetActive(true);
 			Show_Garph_Check = true;

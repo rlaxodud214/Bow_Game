@@ -62,7 +62,7 @@ public class WMG_Grid : WMG_Graph_Manager {
 	/// </summary>
 	public int linkWidth;
 	
-	private List<List<WMG_Node>> gridNodesXY = new List<List<WMG_Node>>();
+	public List<List<WMG_Node>> gridNodesXY = new List<List<WMG_Node>>();
 	private List<GameObject> gridLinks = new List<GameObject>();
 	
 	// cache

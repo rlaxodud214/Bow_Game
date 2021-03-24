@@ -3087,7 +3087,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bc52176b0a853a4e99f20c6488b2ac3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  emptyGraphPrefab: {fileID: 125792, guid: d5954b3d9db637b4abf7219b56b4591c, type: 3}
+  emptyGraphPrefab: {fileID: 125792, guid: b3f55589eb73a88469ac3dd71e7d8d06, type: 3}
   graphGO: {fileID: 0}
   graph: {fileID: 0}
   series1: {fileID: 0}
@@ -3096,14 +3096,7 @@ MonoBehaviour:
   - {x: 2, y: 5}
   - {x: 3, y: 6}
   useData2: 1
-  series1Data2:
-  - 3/3, 50
-  - 3/4, 80
-  - 3/5, 175
-  - 3/6, 160
-  - 3/7, 150
-  - 3/8, 165
-  - 3/9, 120
+  series1Data2: []
   Show_Garph_Check: 0
 --- !u!1 &669832284
 GameObject:

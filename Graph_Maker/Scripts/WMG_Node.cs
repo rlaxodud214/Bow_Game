@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 /// <summary>
 /// The node class primarily used to create the points / bars of axis graphs.
@@ -49,7 +50,23 @@ public class WMG_Node : WMG_GUI_Functions {
 	public int BFS_depth;	// Used in shortest path unweighted
 	public float Dijkstra_depth;	// Used in shortest path weighted
 	public WMG_Series seriesRef; // Used for series legend event delegates
-	
+
+	//추가함 - 3/24
+	public Button btn;
+	public Text text;
+
+	private void Start()
+	{
+		Debug.Log("WMG_Node.cs - Start() 실행됌");
+		//btn.onClick.AddListener(Button_Click_Check);
+	}
+
+	public void Button_Click_Check()
+	{
+		Debug.Log(text.text + "일의 결과 페이지를 로드합니다.");
+	}
+	//추가함 - 3/24
+
 	/// <summary>
 	/// Create a link between two nodes. Sets node references, and repositions to connect the 2 nodes.
 	/// </summary>
@@ -59,6 +76,8 @@ public class WMG_Node : WMG_GUI_Functions {
 	/// <param name="linkId">Link identifier.</param>
 	/// <param name="parent">Parent.</param>
 	/// <param name="repos">If set to <c>true</c> repos.</param>
+	/// 
+
 	public GameObject CreateLink (GameObject target, Object prefabLink, int linkId, GameObject parent, bool repos) {
 		GameObject objLink = Instantiate(prefabLink) as GameObject;
 		Vector3 linkLocalPos = objLink.transform.localPosition;
