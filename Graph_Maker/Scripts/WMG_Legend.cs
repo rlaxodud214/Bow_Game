@@ -481,8 +481,12 @@ public class WMG_Legend : WMG_GUI_Functions {
 	/// <param name="series">Series.</param>
 	/// <param name="index">Index.</param>
 	public WMG_Legend_Entry createLegendEntry(Object prefab, WMG_Series series, int index) {
+		
+		
 		GameObject obj = Instantiate(prefab) as GameObject;
+		// 3/25일 clone 복제 안하게 되면서 아래 주석처리함 -> 4/5 다시 복구
 		theGraph.changeSpriteParent(obj, entriesParent);
+		
 		WMG_Legend_Entry entry = obj.GetComponent<WMG_Legend_Entry>();
 		entry.seriesRef = series;
 		entry.legend = this;

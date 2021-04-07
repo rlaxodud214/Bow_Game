@@ -11,6 +11,8 @@ public class WMG_GUI_Functions : WMG_Text_Functions {
 	}
 	
 	public bool activeInHierarchy(GameObject obj) {
+		//Debug.Log("게임오브젝트(매개값) : " + obj);
+		//Debug.Log("리턴값 : " + obj.activeInHierarchy);
 		return obj.activeInHierarchy;
 	}
 	

@@ -20,9 +20,9 @@ public class sqlite : MonoBehaviour
     public int maxScore;
     public string date;
     public string userID;
-    public string gameID; 
+    public string gameID;
     public string sql;
-    public Dictionary<string, float> Dic = new Dictionary<string, float>(10);
+    public Dictionary<string, float> Dic = new Dictionary<string, float>();
     public List<string> series1Data2;
 
     private static sqlite _Instance;             // 싱글톤 객체 선언, 어디에서든지 접근할 수 있도록 하기위해 
@@ -63,7 +63,7 @@ public class sqlite : MonoBehaviour
     private void Awake()
     {
         _Instance = this;
-        
+
         // 오늘날짜 + 현재시간
         date = DateTime.Now.ToString("yyyy년 MM월 dd일 HH시 mm분 ss초");
         date = SqlFormat(date);
@@ -72,7 +72,6 @@ public class sqlite : MonoBehaviour
         gameID = SqlFormat("21arrow");     // 각자 게임 이름에 맞게 변경
         maxScore = 0;
         MaxScore_Text.text = "최고점수 : " + maxScore;
-        //StartCoroutine(DBCreate());
     }
 
     public string SqlFormat(string sql)
@@ -82,10 +81,7 @@ public class sqlite : MonoBehaviour
 
     void Start()
     {
-        DbConnectionCHek();
-        // gameScore를 기준으로 내림차순 정렬후 제일 첫 레코드의 값을 가져오기
-        DataBaseRead(string.Format("SELECT * FROM Game WHERE userID = {0} ORDER BY gameScore DESC ", userID) );
-        DataBaseRead_Chart(string.Format("SELECT * FROM Game WHERE userID = {0}", userID));
+        
     }
 
     public void DbConnectionCHek() //연결상태 확인

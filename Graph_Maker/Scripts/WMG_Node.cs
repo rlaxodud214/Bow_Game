@@ -51,21 +51,16 @@ public class WMG_Node : WMG_GUI_Functions {
 	public float Dijkstra_depth;	// Used in shortest path weighted
 	public WMG_Series seriesRef; // Used for series legend event delegates
 
-	//추가함 - 3/24
-	public Button btn;
-	public Text text;
+	//추가s - 3/24
+	public Button btn; // x축에서 결과 페이지를 로드하는 버튼
+	public Text text;  // ex) 3/3   4/5 등등 날짜 Text 오브젝트 들어갈 곳
 
-	private void Start()
-	{
-		Debug.Log("WMG_Node.cs - Start() 실행됌");
-		//btn.onClick.AddListener(Button_Click_Check);
-	}
-
+	// 아래 함수에 결과페이지 패널 setActive(true)코드 넣으면 될 듯
 	public void Button_Click_Check()
 	{
 		Debug.Log(text.text + "일의 결과 페이지를 로드합니다.");
 	}
-	//추가함 - 3/24
+	//추가e - 3/24
 
 	/// <summary>
 	/// Create a link between two nodes. Sets node references, and repositions to connect the 2 nodes.

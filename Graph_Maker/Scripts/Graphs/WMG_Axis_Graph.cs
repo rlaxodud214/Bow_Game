@@ -1712,6 +1712,7 @@ public class WMG_Axis_Graph : WMG_Graph_Manager {
 			float size = 0;
 			int lineSeriesCount = lineSeries.Count;
 			for (int j = 0; j < lineSeriesCount; j++) {
+				// Debug.Log("lineSeries[" + j + "] :" + lineSeries[j]);
 				if (!activeInHierarchy(lineSeries[j])) continue;
 				WMG_Series aSeries = lineSeries[j].GetComponent<WMG_Series>();
 				if (aSeries.pointWidthHeight > size) size = aSeries.pointWidthHeight;
@@ -1988,6 +1989,7 @@ public class WMG_Axis_Graph : WMG_Graph_Manager {
 	/// </summary>
 	/// <returns>The series.</returns>
 	public WMG_Series addSeries() {
+		// Debug.Log("lineSeries.Count : " + lineSeries.Count);
 		return addSeriesAt(lineSeries.Count);
 	}
 
@@ -2013,7 +2015,10 @@ public class WMG_Axis_Graph : WMG_Graph_Manager {
 		}
 		GameObject curObj = Instantiate(seriesPrefab) as GameObject;
 		curObj.name = "Series" + (index+1);
+
+		// 3/25일 clone안 만들고 직접 오브젝트 넣으면서 부모 오브젝트 지정하는 메소드 주석처리함 -> 4/5 다시 복구함 
 		changeSpriteParent(curObj, seriesParent);
+
 		if (graphType == graphTypes.line_stacked) {
 			// for stacked lines, ensure series are ordered such that the highest stacked series are rendered first because for area shading it would not be correct otherwise
 			curObj.transform.SetAsFirstSibling();
@@ -2022,6 +2027,7 @@ public class WMG_Axis_Graph : WMG_Graph_Manager {
 		WMG_Series theSeries = curObj.GetComponent<WMG_Series>();
 		if (autoAnimationsEnabled) autoAnim.addSeriesForAutoAnim(theSeries);
 		theSeries.theGraph = this;
+		// Debug.Log("index : " + index + ", curObj : " + curObj);
 		lineSeries.Insert(index, curObj);
 		
 		// set various series properties before init for performance improvement

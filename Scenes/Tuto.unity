@@ -13347,6 +13347,15 @@ MonoBehaviour:
   pause: 0
   check: 0
   origin: {fileID: 0}
+  MaxScore_Text: {fileID: 8609951225458352954}
+  test: {fileID: 8609951225458352954}
+  test_Result: {fileID: 8609951225458352954}
+  maxScore: 0
+  date: 
+  userID: 
+  gameID: 
+  sql: 
+  series1Data2: []
 --- !u!114 &8609951225601985038
 MonoBehaviour:
   m_ObjectHideFlags: 0
