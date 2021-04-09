@@ -8,12 +8,18 @@ public class WMG_X_Tutorial_1 : MonoBehaviour
 	private static WMG_X_Tutorial_1 _Instance;    // 싱글톤 패턴을 사용하기 위한 인스턴스 변수, static으로 선언하여 어디서든 접근 가능
 
 	public GameObject emptyGraphPrefab;
-	public GameObject graphGO;
+
+	public GameObject Graphs; // graphGO 그래프 리스트를 담는 빈 오브젝트, 복제시 부모로 지정하기 위해 넣음
+	public List<GameObject> graphGO;
+	
+
+	public List<GameObject> Position_Objects;
+	public List<Vector3> Position_Value;
+
 	public WMG_Axis_Graph graph;
-
 	public WMG_Series series1;
-
 	public List<Vector2> series1Data;
+
 	public bool useData2;
 	public List<string> series1Data2;
 
@@ -35,33 +41,42 @@ public class WMG_X_Tutorial_1 : MonoBehaviour
 	{
 		_Instance = GetComponent<WMG_X_Tutorial_1>();  // _uiManager에 UIManager의 컴포넌트(자기 자신)에 대한 참조를 얻음
 		Show_Garph_Check = false;
-		groups = new List<string>();
-		data = new List<Vector2>();
+
+		//for(int i=0; i< GameCount; i++)
+  //      {
+		//	Position_Value.Add(Position_Objects[i].transform.position);
+		//}
 	}
 	#endregion
 
 	// Use this for initialization
 	void Start()
 	{
-		series1Data2 = UIManager.Instance.series1Data2;
-		//Debug.Log("series1Data2의 갯수 : " + series1Data2.Count);
+		series1Data2 = Graph.Instance.series1Data2;
+		Debug.Log("series1Data2의 갯수 : " + series1Data2.Count);
+
+		// DB에서 일별 최대 각도 뽑아 온 배열 확인하는 코드
 		//for (int i = 0; i < series1Data2.Count; i++)
 		//{
-		//	// DB에서 일별 최대 각도 뽑아 온 배열 확인하는 코드
-		//	// Debug.Log("series1Data2[i] : " + series1Data2[i]);
+		//	Debug.Log("series1Data2[i] : " + series1Data2[i]);
 		//}
 
-		graphGO = GameObject.Instantiate(emptyGraphPrefab);
-		graphGO.transform.SetParent(this.transform, false);
-		graphGO.transform.localScale = graphGO.transform.localScale * 2.4f;
-		graphGO.transform.Translate(Vector3.up * 0.3f, Space.World);
+		for(int i=0; i<GameCount; i++) {
+			graphGO.Add(GameObject.Instantiate(emptyGraphPrefab));
+			set(graphGO[i], Position_Value[i]);
+		}
+	}
 
-		BackGround0 = GameObject.Find("Sprite_White"); // 흰색
+	public void set(GameObject graphGO, Vector3 position)
+    {
+		groups = new List<string>();
+		data = new List<Vector2>();
+		graphGO.transform.SetParent(Graphs.transform, false);
+		graphGO.transform.localScale = graphGO.transform.localScale * 1.2f;
+		graphGO.transform.Translate(Vector3.up * 0.3f, Space.World);
+		
 		BackGround1 = GameObject.Find("Sprite_Black"); // 검은색
-				
-		BackGround0.transform.localScale = BackGround0.transform.localScale * 1.1f;
 		BackGround1.transform.position += new Vector3(-0.3f, 0.7f, 0);
-		move1();
 
 		graph = graphGO.GetComponent<WMG_Axis_Graph>();
 		series1 = graph.addSeries();
@@ -88,28 +103,28 @@ public class WMG_X_Tutorial_1 : MonoBehaviour
 
 			series1.seriesName = "Range Data";
 			series1.UseXDistBetweenToSpace = true;
-			series1.pointColor = GameManager.Instance.HexToColor("57CFEF");
-			series1.lineColor = GameManager.Instance.HexToColor("FFFFFF");
+			series1.pointColor = HexToColor("57CFEF");
+			series1.lineColor = HexToColor("FFFFFF");
 			series1.pointValues.SetList(data);
 		}
 		else
 		{
 			series1.pointValues.SetList(series1Data);
 		}
-		graphGO.SetActive(false);
+		// graphGO.SetActive(false);
+		graphGO.transform.position = position;
 	}
-
 	public void Show_Garph()
 	{
 		if (Show_Garph_Check)
 		{
-			graphGO.SetActive(false);
+			Graphs.SetActive(false);
 			Show_Garph_Check = false;
 		}
 
 		else
 		{
-			graphGO.SetActive(true);
+			Graphs.SetActive(true);
 			Show_Garph_Check = true;
 		}
 	}
@@ -118,5 +133,19 @@ public class WMG_X_Tutorial_1 : MonoBehaviour
 	public void move1()
     {
 		BackGround0.transform.position -= new Vector3(1.3f, 1.3f, 0);
+	}
+
+	// 함수명 그대로
+	public Color HexToColor(string hex)
+	{
+		hex = hex.Replace("0x", "");
+		hex = hex.Replace("#", "");
+		byte r = byte.Parse(hex.Substring(0, 2), System.Globalization.NumberStyles.HexNumber);
+		byte g = byte.Parse(hex.Substring(2, 2), System.Globalization.NumberStyles.HexNumber);
+		byte b = byte.Parse(hex.Substring(4, 2), System.Globalization.NumberStyles.HexNumber);
+		byte a = 255;
+		if (hex.Length == 8)
+			a = byte.Parse(hex.Substring(6, 2), System.Globalization.NumberStyles.HexNumber);
+		return new Color32(r, g, b, a);
 	}
 }
